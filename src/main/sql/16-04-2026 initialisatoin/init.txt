@@ -1,0 +1,105 @@
+demandeurs
+    nom
+    prenom
+    id nationalite
+    id situation familiale
+    adresse mada
+    contact 
+    email
+
+nationalite
+    id
+    libelle
+
+situation familiale
+    id
+    libelle
+
+type visa
+    id
+    libelle(visa travailleur, visa investisseur)
+
+passeport
+    id
+    numero passeport
+    id demandeur
+    date naissance
+    date delivrance
+    date expiration
+
+visa 
+    id 
+    id passeport
+    numero visa
+    date entree territoire
+    date sortie territoire
+    date delivrance
+    date expiration
+    
+
+visa transformable
+    id
+    id demandeur
+    numero visa
+    date entree territoire
+    date sortie territoire
+    date delivrance
+    date expiration
+
+carte resident
+    id 
+    id passeport
+    id demande
+    numero visa
+    date entree territoire
+    date sortie territoire
+    date delivrance
+    date expiration
+
+
+demandes
+    id
+    id demandeur
+    id visa(Nullable)
+    id type visa
+    date demande
+    id status
+    date traitement
+
+demande piece
+    id
+    id demande
+    id piece
+
+type demande(renouvellement, duplicata, transformation, creation)
+    id
+    libelle
+
+piece justificative
+    id
+    code
+    libelle
+    obligatoire
+
+
+historique status demande
+    id
+    id demande
+    id status
+    id administrateur
+
+
+administrateur
+    nom
+    mdp
+
+status
+    id
+    status id
+    libelle
+
+
+
+
+
+
