@@ -1,3 +1,4 @@
+-- Active: 1749037938113@@127.0.0.1@5432@visa_db
 -- Script SQL pour la création de la base de données de gestion des visas
 --nom de la base visa_db
 
@@ -42,7 +43,7 @@ CREATE TABLE piece_justificative(
    PRIMARY KEY(id)
 );
 
-CREATE TABLE demandeurs(
+CREATE TABLE demandeur(
    id SERIAL,
    nom VARCHAR(255)  NOT NULL,
    prenom VARCHAR(255)  NOT NULL,
@@ -64,7 +65,7 @@ CREATE TABLE passeport(
    date_expiration DATE NOT NULL,
    id_demandeur INTEGER NOT NULL,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_demandeur) REFERENCES demandeurs(id)
+   FOREIGN KEY(id_demandeur) REFERENCES demandeur(id)
 );
 
 CREATE TABLE visa(
@@ -88,7 +89,7 @@ CREATE TABLE visa_transformable(
    date_expiration DATE NOT NULL,
    id_demandeur INTEGER NOT NULL,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_demandeur) REFERENCES demandeurs(id)
+   FOREIGN KEY(id_demandeur) REFERENCES demandeur(id)
 );
 
 CREATE TABLE carte_resident(
