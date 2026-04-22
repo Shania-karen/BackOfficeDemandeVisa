@@ -1,5 +1,7 @@
 package mg.backoffice.models;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "demande")
@@ -30,6 +31,10 @@ public class Demande {
     @ManyToOne
     @JoinColumn(name = "id_categorie_visa")
     private CategorieVisa categorieVisa;
+
+    @ManyToOne
+    @JoinColumn(name = "id_demandeur")
+    private Demandeur demandeur;
 
     public int getId() {
         return id;
@@ -69,5 +74,13 @@ public class Demande {
 
     public void setCategorieVisa(CategorieVisa categorieVisa) {
         this.categorieVisa = categorieVisa;
+    }
+
+    public Demandeur getDemandeur() {
+        return demandeur;
+    }
+
+    public void setDemandeur(Demandeur demandeur) {
+        this.demandeur = demandeur;
     }
 }

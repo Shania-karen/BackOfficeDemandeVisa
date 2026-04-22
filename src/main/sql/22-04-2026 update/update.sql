@@ -90,3 +90,15 @@ INSERT INTO visa_transformable (numero_visa, date_entree_territoire, date_sortie
 INSERT INTO demande (date_demande, date_traitement, id_visa_transformable, id_categorie_visa, id_demandeur) VALUES 
 ('2026-04-20', '2026-04-22',8, 1, 1), -- Dupont demande Investisseur (ID 1)
 ('2026-04-21', '2026-04-22', 9, 2, 3); -- Smith demande Travailleur (ID 2)
+-- Ajout du rôle pour différencier ADMIN et RH
+ALTER TABLE administrateur ADD COLUMN role VARCHAR(50) DEFAULT 'ROLE_ADMIN';
+
+-- Un administrateur admin vide pour les tests
+INSERT INTO administrateur (nom, identifiant, mot_de_passe, role) VALUES ('Admin Principal', 'admin', 'admin', 'ROLE_ADMIN');
+-- Un lecteur (RH) pour les tests
+INSERT INTO administrateur (nom, identifiant, mot_de_passe, role) VALUES ('Ressources Humaines', 'rh', 'rh123', 'ROLE_RH');
+
+-- Historique de statut (Dupont accepté (VAL), Smith en attente (ATT))
+INSERT INTO historique_status_demande (id_demande, id_status, id_admin, date_status) VALUES 
+(1, 2, 1, '2026-04-22 10:00:00'), -- STATUT VAL (id=2) pour la demande de Dupont
+(2, 1, 1, '2026-04-22 10:05:00'); -- STATUT ATT (id=1) pour la demande de Smith

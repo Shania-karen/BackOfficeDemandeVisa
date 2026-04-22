@@ -23,6 +23,9 @@ public class Administrateur {
     @Column(name = "mot_de_passe", nullable = false)
     private String motDePasse;
 
+    @Column(name = "role")
+    private String role; // ex: ROLE_ADMIN, ROLE_RH
+
     public int getId() {
         return id;
     }
@@ -55,4 +58,11 @@ public class Administrateur {
         this.motDePasse = motDePasse;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }
