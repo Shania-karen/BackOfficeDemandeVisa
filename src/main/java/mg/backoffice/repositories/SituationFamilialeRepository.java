@@ -1,12 +1,10 @@
 package mg.backoffice.repositories;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import mg.backoffice.models.Demandeur;
-
-
+import mg.backoffice.models.SituationFamiliale;
 
 @Repository
-public interface DemandeurRepository extends JpaRepository<Demandeur, Integer> {
-    
+public interface SituationFamilialeRepository extends JpaRepository<SituationFamiliale, Integer> {
 }

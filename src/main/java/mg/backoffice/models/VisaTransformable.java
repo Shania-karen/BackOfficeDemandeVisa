@@ -1,5 +1,7 @@
 package mg.backoffice.models;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "visa_transformable")
@@ -33,8 +34,8 @@ public class VisaTransformable {
     private LocalDate dateExpiration;
 
     @ManyToOne
-    @JoinColumn(name = "id_demandeur", nullable = false)
-    private Demandeur demandeur;
+    @JoinColumn(name = "id_passeport")
+    private Passeport passeport;
 
     public int getId() {
         return id;
@@ -84,11 +85,11 @@ public class VisaTransformable {
         this.dateExpiration = dateExpiration;
     }
 
-    public Demandeur getDemandeur() {
-        return demandeur;
+    public Passeport getPasseport() {
+        return passeport;
     }
 
-    public void setDemandeur(Demandeur demandeur) {
-        this.demandeur = demandeur;
+    public void setPasseport(Passeport passeport) {
+        this.passeport = passeport;
     }
 }
