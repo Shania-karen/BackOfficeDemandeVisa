@@ -39,6 +39,65 @@
                     </div>
                 </div>
 
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Né(e) le</label>
+                        <input type="date" class="form-control" name="dateNaissance" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Situation de famille</label>
+                        <select class="form-select" name="idSituationFamiliale" required>
+                            <option value="">Sélectionner...</option>
+                            <option th:each="sit : ${situations}" th:value="${sit.id}" th:text="${sit.libelle}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Nationalité</label>
+                        <select class="form-select" name="idNationalite" required>
+                            <option value="">Sélectionner...</option>
+                            <option th:each="nat : ${nationalites}" th:value="${nat.id}" th:text="${nat.libelle}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <h5 class="border-bottom pb-2 mt-4">Coordonnées</h5>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Domicile (Pays d'origine)</label>
+                        <input type="text" class="form-control" name="domicile" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Adresse à Madagascar</label>
+                        <input type="text" class="form-control" name="adresseMada" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Contact (Tel)</label>
+                        <input type="number" class="form-control" name="contact" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+                </div>
+
+                <h5 class="border-bottom pb-2 mt-4">Informations concernant le Passeport</h5>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">N° de Passeport</label>
+                        <input type="text" class="form-control" name="numeroPasseport" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Date de délivrance</label>
+                        <input type="date" class="form-control" name="dateDelivrancePasseport" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Date d'expiration</label>
+                        <input type="date" class="form-control" name="dateExpirationPasseport" required>
+                    </div>
+                </div>
+
                 <h5 class="border-bottom pb-2 mt-4">Type de Visa & Pièces Fournies</h5>
                 <div class="row mb-3">
                     <div class="col-md-6">

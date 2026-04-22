@@ -45,7 +45,19 @@ public class DemandeService {
             throw new RuntimeException("Demande Invalide : Le visa transformable a expiré.");
         }
 
-        // 2. Vérification des pièces justificatives obligatoires
+        // 2. Vérification que le passeport existe et qu'il est lié au visa transformable
+        if (visaActuel.getPasseport() == null) {
+            throw new RuntimeException("Demande Invalide : Ce visa n'est lié à aucun passeport en base de données.");
+        }
+        
+        String numeroPasseportSaisi = form.getNumeroPasseport() != null ? form.getNumeroPasseport().trim() : "";
+        if (!visaActuel.getPasseport().getNumeroPasseport().equalsIgnoreCase(numeroPasseportSaisi)) {
+            throw new RuntimeException("Demande Invalide : Le numéro de passeport saisi (" + numeroPasseportSaisi + 
+                                       ") ne correspond pas au passeport associé à ce visa transformable (" + 
+                                       visaActuel.getPasseport().getNumeroPasseport() + ").");
+        }
+
+        // 3. Vérification des pièces justificatives obligatoires
         List<Integer> idsPiecesObligatoires = pieceRepository.findIdsPiecesObligatoires(form.getIdCategorieVisa());
         boolean tousLesDossiersPresents = form.getIdsPiecesFournies().containsAll(idsPiecesObligatoires);
         
