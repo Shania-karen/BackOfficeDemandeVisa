@@ -33,7 +33,7 @@ public class Demande {
     private CategorieVisa categorieVisa;
 
     @ManyToOne
-    @JoinColumn(name = "id_demandeur")
+    @JoinColumn(name = "id_individu")
     private Demandeur demandeur;
 
     public int getId() {

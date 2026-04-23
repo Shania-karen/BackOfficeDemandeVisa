@@ -1,5 +1,7 @@
 package mg.backoffice.models;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "demandeur")
+@Table(name = "individu")
 public class Demandeur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +23,15 @@ public class Demandeur {
 
     @Column(name = "prenom", nullable = false)
     private String prenom;
+
+    @Column(name = "genre")
+    private String genre;
+
+    @Column(name = "nom_jeune_fille")
+    private String nomJeuneFille;
+
+    @Column(name = "date_naissance")
+    private LocalDate dateNaissance;
 
     @Column(name = "adresse_mada", nullable = false)
     private String adresseMada;
@@ -101,5 +112,29 @@ public class Demandeur {
 
     public void setNationalite(Nationalite nationalite) {
         this.nationalite = nationalite;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getNomJeuneFille() {
+        return nomJeuneFille;
+    }
+
+    public void setNomJeuneFille(String nomJeuneFille) {
+        this.nomJeuneFille = nomJeuneFille;
+    }
+
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
     }
 }

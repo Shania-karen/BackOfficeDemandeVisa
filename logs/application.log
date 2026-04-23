@@ -1,0 +1,276 @@
+2026-04-23T07:29:10.305+03:00  INFO 19680 --- [app] [restartedMain] mg.backoffice.AppApplication             : Starting AppApplication using Java 17.0.12 with PID 19680 (D:\shania\itu\L3\MrNaina\BackOfficeDemandeVisa\target\classes started by ED-MSI in D:\shania\itu\L3\MrNaina\BackOfficeDemandeVisa)
+2026-04-23T07:29:10.310+03:00 DEBUG 19680 --- [app] [restartedMain] mg.backoffice.AppApplication             : Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-23T07:29:10.311+03:00  INFO 19680 --- [app] [restartedMain] mg.backoffice.AppApplication             : No active profile set, falling back to 1 default profile: "default"
+2026-04-23T07:29:10.372+03:00  INFO 19680 --- [app] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-23T07:29:10.373+03:00  INFO 19680 --- [app] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-23T07:29:10.999+03:00  INFO 19680 --- [app] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-23T07:29:11.085+03:00  INFO 19680 --- [app] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 76 ms. Found 10 JPA repository interfaces.
+2026-04-23T07:29:11.679+03:00  INFO 19680 --- [app] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-04-23T07:29:11.697+03:00  INFO 19680 --- [app] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-23T07:29:11.697+03:00  INFO 19680 --- [app] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-23T07:29:11.747+03:00  INFO 19680 --- [app] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1374 ms
+2026-04-23T07:29:11.962+03:00  INFO 19680 --- [app] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-23T07:29:12.014+03:00  INFO 19680 --- [app] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-04-23T07:29:12.453+03:00  INFO 19680 --- [app] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-23T07:29:12.479+03:00  INFO 19680 --- [app] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-23T07:29:12.729+03:00  INFO 19680 --- [app] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5b48edb5
+2026-04-23T07:29:12.732+03:00  INFO 19680 --- [app] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-23T07:29:12.763+03:00  WARN 19680 --- [app] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-23T07:29:12.785+03:00  INFO 19680 --- [app] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/visa_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.4
+	Default catalog/schema: visa_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-23T07:29:13.870+03:00  INFO 19680 --- [app] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-23T07:29:13.963+03:00  INFO 19680 --- [app] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-23T07:29:14.045+03:00  INFO 19680 --- [app] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-23T07:29:14.783+03:00  WARN 19680 --- [app] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-23T07:29:14.844+03:00  INFO 19680 --- [app] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-04-23T07:29:15.260+03:00  INFO 19680 --- [app] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-04-23T07:29:15.266+03:00  INFO 19680 --- [app] [restartedMain] mg.backoffice.AppApplication             : Started AppApplication in 5.426 seconds (process running for 5.872)
+2026-04-23T07:29:22.778+03:00  INFO 19680 --- [app] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-23T07:29:22.778+03:00  INFO 19680 --- [app] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-23T07:29:22.794+03:00  INFO 19680 --- [app] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 16 ms
+2026-04-23T07:29:40.296+03:00  INFO 19680 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : === DETAIL DEMANDE - ID: 13 ===
+2026-04-23T07:29:40.316+03:00  INFO 19680 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Demande trouvée - ID: 13
+2026-04-23T07:29:40.317+03:00  INFO 19680 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Demandeur: NULL
+2026-04-23T07:29:40.317+03:00  INFO 19680 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Email: NULL
+2026-04-23T07:29:40.317+03:00  INFO 19680 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Contact: NULL
+2026-04-23T07:29:40.318+03:00  INFO 19680 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Visa Transformable: VT-2026-002
+2026-04-23T07:29:40.318+03:00  INFO 19680 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Categorie: Investisseur
+2026-04-23T07:32:32.474+03:00  INFO 19680 --- [app] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-23T07:32:32.793+03:00  INFO 19680 --- [app] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-23T07:32:32.795+03:00  INFO 19680 --- [app] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-23T07:32:32.803+03:00  INFO 19680 --- [app] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-04-23T07:32:32.808+03:00  INFO 19680 --- [app] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-04-23T07:43:19.577+03:00  INFO 20304 --- [app] [restartedMain] mg.backoffice.AppApplication             : Starting AppApplication using Java 17.0.12 with PID 20304 (D:\shania\itu\L3\MrNaina\BackOfficeDemandeVisa\target\classes started by ED-MSI in D:\shania\itu\L3\MrNaina\BackOfficeDemandeVisa)
+2026-04-23T07:43:19.582+03:00 DEBUG 20304 --- [app] [restartedMain] mg.backoffice.AppApplication             : Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-23T07:43:19.582+03:00  INFO 20304 --- [app] [restartedMain] mg.backoffice.AppApplication             : No active profile set, falling back to 1 default profile: "default"
+2026-04-23T07:43:19.699+03:00  INFO 20304 --- [app] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-23T07:43:19.699+03:00  INFO 20304 --- [app] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-23T07:43:21.035+03:00  INFO 20304 --- [app] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-23T07:43:21.218+03:00  INFO 20304 --- [app] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 163 ms. Found 10 JPA repository interfaces.
+2026-04-23T07:43:22.630+03:00  INFO 20304 --- [app] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-04-23T07:43:22.659+03:00  INFO 20304 --- [app] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-23T07:43:22.659+03:00  INFO 20304 --- [app] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-23T07:43:22.755+03:00  INFO 20304 --- [app] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 3056 ms
+2026-04-23T07:43:23.163+03:00  INFO 20304 --- [app] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-23T07:43:23.271+03:00  INFO 20304 --- [app] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-04-23T07:43:24.180+03:00  INFO 20304 --- [app] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-23T07:43:24.253+03:00  INFO 20304 --- [app] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-23T07:43:24.772+03:00  INFO 20304 --- [app] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@77cd6373
+2026-04-23T07:43:24.777+03:00  INFO 20304 --- [app] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-23T07:43:24.882+03:00  WARN 20304 --- [app] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-23T07:43:24.959+03:00  INFO 20304 --- [app] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/visa_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.4
+	Default catalog/schema: visa_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-23T07:43:27.430+03:00  INFO 20304 --- [app] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-23T07:43:27.768+03:00  INFO 20304 --- [app] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-23T07:43:27.917+03:00  INFO 20304 --- [app] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-23T07:43:29.507+03:00  WARN 20304 --- [app] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-23T07:43:29.665+03:00  INFO 20304 --- [app] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-04-23T07:43:30.701+03:00  INFO 20304 --- [app] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-04-23T07:43:30.717+03:00  INFO 20304 --- [app] [restartedMain] mg.backoffice.AppApplication             : Started AppApplication in 11.976 seconds (process running for 13.106)
+2026-04-23T07:43:40.289+03:00  INFO 20304 --- [app] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-23T07:43:40.289+03:00  INFO 20304 --- [app] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-23T07:43:40.296+03:00  INFO 20304 --- [app] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2026-04-23T07:57:52.592+03:00  INFO 20304 --- [app] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-23T07:57:52.843+03:00  INFO 20304 --- [app] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-23T07:57:52.851+03:00  INFO 20304 --- [app] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-23T07:57:52.855+03:00  INFO 20304 --- [app] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-04-23T07:57:52.859+03:00  INFO 20304 --- [app] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-04-23T07:58:12.734+03:00  INFO 24448 --- [app] [restartedMain] mg.backoffice.AppApplication             : Starting AppApplication using Java 17.0.12 with PID 24448 (D:\shania\itu\L3\MrNaina\BackOfficeDemandeVisa\target\classes started by ED-MSI in D:\shania\itu\L3\MrNaina\BackOfficeDemandeVisa)
+2026-04-23T07:58:12.738+03:00 DEBUG 24448 --- [app] [restartedMain] mg.backoffice.AppApplication             : Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-23T07:58:12.739+03:00  INFO 24448 --- [app] [restartedMain] mg.backoffice.AppApplication             : No active profile set, falling back to 1 default profile: "default"
+2026-04-23T07:58:12.802+03:00  INFO 24448 --- [app] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-23T07:58:12.803+03:00  INFO 24448 --- [app] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-23T07:58:13.493+03:00  INFO 24448 --- [app] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-23T07:58:13.590+03:00  INFO 24448 --- [app] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 87 ms. Found 11 JPA repository interfaces.
+2026-04-23T07:58:14.238+03:00  INFO 24448 --- [app] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-04-23T07:58:14.253+03:00  INFO 24448 --- [app] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-23T07:58:14.254+03:00  INFO 24448 --- [app] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-23T07:58:14.310+03:00  INFO 24448 --- [app] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1506 ms
+2026-04-23T07:58:14.550+03:00  INFO 24448 --- [app] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-23T07:58:14.646+03:00  INFO 24448 --- [app] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-04-23T07:58:15.261+03:00  INFO 24448 --- [app] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-23T07:58:15.305+03:00  INFO 24448 --- [app] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-23T07:58:15.578+03:00  INFO 24448 --- [app] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@42b484a1
+2026-04-23T07:58:15.581+03:00  INFO 24448 --- [app] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-23T07:58:15.644+03:00  WARN 24448 --- [app] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-23T07:58:15.688+03:00  INFO 24448 --- [app] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/visa_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.4
+	Default catalog/schema: visa_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-23T07:58:17.662+03:00  INFO 24448 --- [app] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-23T07:58:17.878+03:00  INFO 24448 --- [app] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-23T07:58:18.050+03:00  INFO 24448 --- [app] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-23T07:58:19.633+03:00  WARN 24448 --- [app] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-23T07:58:19.777+03:00  INFO 24448 --- [app] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-04-23T07:58:20.612+03:00  INFO 24448 --- [app] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-04-23T07:58:20.625+03:00  INFO 24448 --- [app] [restartedMain] mg.backoffice.AppApplication             : Started AppApplication in 8.432 seconds (process running for 9.022)
+2026-04-23T07:58:27.788+03:00  INFO 24448 --- [app] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-23T07:58:27.788+03:00  INFO 24448 --- [app] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-23T07:58:27.793+03:00  INFO 24448 --- [app] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-04-23T07:58:38.074+03:00  INFO 24448 --- [app] [http-nio-8080-exec-3] m.backoffice.controllers.ViewController  : === DETAIL DEMANDE - ID: 16 ===
+2026-04-23T07:58:38.087+03:00  INFO 24448 --- [app] [http-nio-8080-exec-3] m.backoffice.controllers.ViewController  : Demande trouvée - ID: 16
+2026-04-23T07:58:38.087+03:00  INFO 24448 --- [app] [http-nio-8080-exec-3] m.backoffice.controllers.ViewController  : Demandeur: Ralijaona Shania
+2026-04-23T07:58:38.087+03:00  INFO 24448 --- [app] [http-nio-8080-exec-3] m.backoffice.controllers.ViewController  : Email: ralijaonashania@gmail.com
+2026-04-23T07:58:38.087+03:00  INFO 24448 --- [app] [http-nio-8080-exec-3] m.backoffice.controllers.ViewController  : Contact: 344521178
+2026-04-23T07:58:38.087+03:00  INFO 24448 --- [app] [http-nio-8080-exec-3] m.backoffice.controllers.ViewController  : Visa Transformable: VT-2026-002
+2026-04-23T07:58:38.087+03:00  INFO 24448 --- [app] [http-nio-8080-exec-3] m.backoffice.controllers.ViewController  : Categorie: Investisseur
+2026-04-23T08:28:30.906+03:00  INFO 24448 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : === DETAIL DEMANDE - ID: 1 ===
+2026-04-23T08:28:30.912+03:00  INFO 24448 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Demande trouvée - ID: 1
+2026-04-23T08:28:30.912+03:00  INFO 24448 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Demandeur: Ralijaona Shania
+2026-04-23T08:28:30.912+03:00  INFO 24448 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Email: ralijaonashania@gmail.com
+2026-04-23T08:28:30.912+03:00  INFO 24448 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Contact: 344521178
+2026-04-23T08:28:30.912+03:00  INFO 24448 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Visa Transformable: VT-2026-002
+2026-04-23T08:28:30.912+03:00  INFO 24448 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Categorie: Travailleur
+2026-04-23T08:40:04.578+03:00  INFO 24448 --- [app] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-23T08:40:04.960+03:00  INFO 24448 --- [app] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-23T08:40:04.968+03:00  INFO 24448 --- [app] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-23T08:40:04.977+03:00  INFO 24448 --- [app] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-04-23T08:40:04.985+03:00  INFO 24448 --- [app] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-04-23T08:40:25.249+03:00  INFO 14856 --- [app] [restartedMain] mg.backoffice.AppApplication             : Starting AppApplication using Java 17.0.12 with PID 14856 (D:\shania\itu\L3\MrNaina\BackOfficeDemandeVisa\target\classes started by ED-MSI in D:\shania\itu\L3\MrNaina\BackOfficeDemandeVisa)
+2026-04-23T08:40:25.252+03:00 DEBUG 14856 --- [app] [restartedMain] mg.backoffice.AppApplication             : Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-23T08:40:25.253+03:00  INFO 14856 --- [app] [restartedMain] mg.backoffice.AppApplication             : No active profile set, falling back to 1 default profile: "default"
+2026-04-23T08:40:25.316+03:00  INFO 14856 --- [app] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-23T08:40:25.317+03:00  INFO 14856 --- [app] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-23T08:40:26.178+03:00  INFO 14856 --- [app] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-23T08:40:26.293+03:00  INFO 14856 --- [app] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 103 ms. Found 11 JPA repository interfaces.
+2026-04-23T08:40:26.982+03:00  INFO 14856 --- [app] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-04-23T08:40:26.997+03:00  INFO 14856 --- [app] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-23T08:40:26.998+03:00  INFO 14856 --- [app] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-23T08:40:27.050+03:00  INFO 14856 --- [app] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1732 ms
+2026-04-23T08:40:27.251+03:00  INFO 14856 --- [app] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-23T08:40:27.305+03:00  INFO 14856 --- [app] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-04-23T08:40:27.735+03:00  INFO 14856 --- [app] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-23T08:40:27.769+03:00  INFO 14856 --- [app] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-23T08:40:27.965+03:00  INFO 14856 --- [app] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@181ea6ce
+2026-04-23T08:40:27.967+03:00  INFO 14856 --- [app] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-23T08:40:28.006+03:00  WARN 14856 --- [app] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-23T08:40:28.040+03:00  INFO 14856 --- [app] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/visa_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.4
+	Default catalog/schema: visa_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-23T08:40:29.109+03:00  INFO 14856 --- [app] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-23T08:40:29.289+03:00  INFO 14856 --- [app] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-23T08:40:29.372+03:00  INFO 14856 --- [app] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-23T08:40:30.128+03:00  WARN 14856 --- [app] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-23T08:40:30.213+03:00  INFO 14856 --- [app] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-04-23T08:40:30.630+03:00  INFO 14856 --- [app] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-04-23T08:40:30.630+03:00  INFO 14856 --- [app] [restartedMain] mg.backoffice.AppApplication             : Started AppApplication in 5.933 seconds (process running for 6.489)
+2026-04-23T08:40:37.852+03:00  INFO 14856 --- [app] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-23T08:40:37.852+03:00  INFO 14856 --- [app] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-23T08:40:37.852+03:00  INFO 14856 --- [app] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-04-23T08:40:49.069+03:00  INFO 14856 --- [app] [http-nio-8080-exec-7] m.backoffice.controllers.ViewController  : === DETAIL DEMANDE - ID: 2 ===
+2026-04-23T08:40:49.082+03:00  INFO 14856 --- [app] [http-nio-8080-exec-7] m.backoffice.controllers.ViewController  : Demande trouvée - ID: 2
+2026-04-23T08:40:49.082+03:00  INFO 14856 --- [app] [http-nio-8080-exec-7] m.backoffice.controllers.ViewController  : Demandeur: Ralijaona Shania
+2026-04-23T08:40:49.082+03:00  INFO 14856 --- [app] [http-nio-8080-exec-7] m.backoffice.controllers.ViewController  : Email: ralijaonashania@gmail.com
+2026-04-23T08:40:49.082+03:00  INFO 14856 --- [app] [http-nio-8080-exec-7] m.backoffice.controllers.ViewController  : Contact: 344521148
+2026-04-23T08:40:49.082+03:00  INFO 14856 --- [app] [http-nio-8080-exec-7] m.backoffice.controllers.ViewController  : Visa Transformable: VT-2026-002
+2026-04-23T08:40:49.082+03:00  INFO 14856 --- [app] [http-nio-8080-exec-7] m.backoffice.controllers.ViewController  : Categorie: Travailleur
+2026-04-23T08:45:32.706+03:00  INFO 14856 --- [app] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-23T08:45:32.965+03:00  INFO 14856 --- [app] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-23T08:45:32.968+03:00  INFO 14856 --- [app] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-23T08:45:32.972+03:00  INFO 14856 --- [app] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-04-23T08:45:32.977+03:00  INFO 14856 --- [app] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-04-23T08:45:46.047+03:00  INFO 15392 --- [app] [restartedMain] mg.backoffice.AppApplication             : Starting AppApplication using Java 17.0.12 with PID 15392 (D:\shania\itu\L3\MrNaina\BackOfficeDemandeVisa\target\classes started by ED-MSI in D:\shania\itu\L3\MrNaina\BackOfficeDemandeVisa)
+2026-04-23T08:45:46.058+03:00 DEBUG 15392 --- [app] [restartedMain] mg.backoffice.AppApplication             : Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-23T08:45:46.059+03:00  INFO 15392 --- [app] [restartedMain] mg.backoffice.AppApplication             : No active profile set, falling back to 1 default profile: "default"
+2026-04-23T08:45:46.143+03:00  INFO 15392 --- [app] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-23T08:45:46.144+03:00  INFO 15392 --- [app] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-23T08:45:46.864+03:00  INFO 15392 --- [app] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-23T08:45:46.962+03:00  INFO 15392 --- [app] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 88 ms. Found 11 JPA repository interfaces.
+2026-04-23T08:45:47.610+03:00  INFO 15392 --- [app] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-04-23T08:45:47.626+03:00  INFO 15392 --- [app] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-23T08:45:47.626+03:00  INFO 15392 --- [app] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-23T08:45:47.687+03:00  INFO 15392 --- [app] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1543 ms
+2026-04-23T08:45:47.870+03:00  INFO 15392 --- [app] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-23T08:45:47.933+03:00  INFO 15392 --- [app] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-04-23T08:45:48.429+03:00  INFO 15392 --- [app] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-23T08:45:48.471+03:00  INFO 15392 --- [app] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-23T08:45:48.690+03:00  INFO 15392 --- [app] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@74d051bc
+2026-04-23T08:45:48.692+03:00  INFO 15392 --- [app] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-23T08:45:48.732+03:00  WARN 15392 --- [app] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-23T08:45:48.761+03:00  INFO 15392 --- [app] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/visa_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.4
+	Default catalog/schema: visa_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-23T08:45:50.067+03:00  INFO 15392 --- [app] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-23T08:45:50.202+03:00  INFO 15392 --- [app] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-23T08:45:50.291+03:00  INFO 15392 --- [app] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-23T08:45:51.135+03:00  WARN 15392 --- [app] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-23T08:45:51.223+03:00  INFO 15392 --- [app] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-04-23T08:45:51.673+03:00  INFO 15392 --- [app] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-04-23T08:45:51.680+03:00  INFO 15392 --- [app] [restartedMain] mg.backoffice.AppApplication             : Started AppApplication in 6.204 seconds (process running for 6.832)
+2026-04-23T08:45:54.323+03:00  INFO 15392 --- [app] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-23T08:45:54.323+03:00  INFO 15392 --- [app] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-23T08:45:54.323+03:00  INFO 15392 --- [app] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-04-23T08:45:54.379+03:00  INFO 15392 --- [app] [http-nio-8080-exec-1] m.backoffice.controllers.ViewController  : === DETAIL DEMANDE - ID: 2 ===
+2026-04-23T08:45:54.493+03:00  INFO 15392 --- [app] [http-nio-8080-exec-1] m.backoffice.controllers.ViewController  : Demande trouvée - ID: 2
+2026-04-23T08:45:54.493+03:00  INFO 15392 --- [app] [http-nio-8080-exec-1] m.backoffice.controllers.ViewController  : Demandeur: Ralijaona Shania
+2026-04-23T08:45:54.493+03:00  INFO 15392 --- [app] [http-nio-8080-exec-1] m.backoffice.controllers.ViewController  : Email: ralijaonashania@gmail.com
+2026-04-23T08:45:54.493+03:00  INFO 15392 --- [app] [http-nio-8080-exec-1] m.backoffice.controllers.ViewController  : Contact: 344521148
+2026-04-23T08:45:54.493+03:00  INFO 15392 --- [app] [http-nio-8080-exec-1] m.backoffice.controllers.ViewController  : Visa Transformable: VT-2026-002
+2026-04-23T08:45:54.493+03:00  INFO 15392 --- [app] [http-nio-8080-exec-1] m.backoffice.controllers.ViewController  : Categorie: Travailleur
+2026-04-23T08:46:30.305+03:00  INFO 15392 --- [app] [http-nio-8080-exec-6] m.backoffice.controllers.ViewController  : === DETAIL DEMANDE - ID: 1 ===
+2026-04-23T08:46:30.312+03:00  INFO 15392 --- [app] [http-nio-8080-exec-6] m.backoffice.controllers.ViewController  : Demande trouvée - ID: 1
+2026-04-23T08:46:30.312+03:00  INFO 15392 --- [app] [http-nio-8080-exec-6] m.backoffice.controllers.ViewController  : Demandeur: Ralijaona Shania
+2026-04-23T08:46:30.312+03:00  INFO 15392 --- [app] [http-nio-8080-exec-6] m.backoffice.controllers.ViewController  : Email: ralijaonashania@gmail.com
+2026-04-23T08:46:30.312+03:00  INFO 15392 --- [app] [http-nio-8080-exec-6] m.backoffice.controllers.ViewController  : Contact: 344521148
+2026-04-23T08:46:30.313+03:00  INFO 15392 --- [app] [http-nio-8080-exec-6] m.backoffice.controllers.ViewController  : Visa Transformable: VT-2026-002
+2026-04-23T08:46:30.313+03:00  INFO 15392 --- [app] [http-nio-8080-exec-6] m.backoffice.controllers.ViewController  : Categorie: Travailleur
+2026-04-23T08:49:32.546+03:00  INFO 15392 --- [app] [http-nio-8080-exec-9] m.backoffice.controllers.ViewController  : === DETAIL DEMANDE - ID: 2 ===
+2026-04-23T08:49:32.558+03:00  INFO 15392 --- [app] [http-nio-8080-exec-9] m.backoffice.controllers.ViewController  : Demande trouvée - ID: 2
+2026-04-23T08:49:32.559+03:00  INFO 15392 --- [app] [http-nio-8080-exec-9] m.backoffice.controllers.ViewController  : Demandeur: Ralijaona Shania
+2026-04-23T08:49:32.559+03:00  INFO 15392 --- [app] [http-nio-8080-exec-9] m.backoffice.controllers.ViewController  : Email: ralijaonashania@gmail.com
+2026-04-23T08:49:32.559+03:00  INFO 15392 --- [app] [http-nio-8080-exec-9] m.backoffice.controllers.ViewController  : Contact: 344521148
+2026-04-23T08:49:32.560+03:00  INFO 15392 --- [app] [http-nio-8080-exec-9] m.backoffice.controllers.ViewController  : Visa Transformable: VT-2026-002
+2026-04-23T08:49:32.560+03:00  INFO 15392 --- [app] [http-nio-8080-exec-9] m.backoffice.controllers.ViewController  : Categorie: Travailleur
+2026-04-23T08:50:43.705+03:00  INFO 15392 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : === DETAIL DEMANDE - ID: 3 ===
+2026-04-23T08:50:43.708+03:00  INFO 15392 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Demande trouvée - ID: 3
+2026-04-23T08:50:43.708+03:00  INFO 15392 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Demandeur: Ralijaona Shania
+2026-04-23T08:50:43.708+03:00  INFO 15392 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Email: ralijaonashania@gmail.com
+2026-04-23T08:50:43.708+03:00  INFO 15392 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Contact: 344521148
+2026-04-23T08:50:43.708+03:00  INFO 15392 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Visa Transformable: VT-2026-002
+2026-04-23T08:50:43.708+03:00  INFO 15392 --- [app] [http-nio-8080-exec-8] m.backoffice.controllers.ViewController  : Categorie: Travailleur

@@ -1,5 +1,6 @@
 package mg.backoffice.repositories;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,4 +29,15 @@ public interface DemandeRepository extends JpaRepository<Demande, Integer> {
                    "AND h.date_status = (SELECT MAX(h2.date_status) FROM historique_status_demande h2 WHERE h2.id_demande = d.id)", 
            nativeQuery = true)
     List<Demande> findDemandesEnAttente();
+
+    // Récupère une demande avec toutes ses relations chargées
+    @Query("SELECT d FROM Demande d " +
+           "LEFT JOIN FETCH d.demandeur dem " +
+           "LEFT JOIN FETCH dem.situationFamiliale " +
+           "LEFT JOIN FETCH dem.nationalite " +
+           "LEFT JOIN FETCH d.visaTransformable vt " +
+           "LEFT JOIN FETCH vt.passeport " +
+           "LEFT JOIN FETCH d.categorieVisa " +
+           "WHERE d.id = :id")
+    Optional<Demande> findByIdWithRelations(Integer id);
 }

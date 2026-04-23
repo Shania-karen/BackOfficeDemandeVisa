@@ -1,7 +1,7 @@
 package mg.backoffice.services;
 
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,80 +9,85 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mg.backoffice.dto.DemandeFormDTO;
+import mg.backoffice.models.CategorieVisa;
+import mg.backoffice.models.Demande;
+import mg.backoffice.models.Demandeur;
+import mg.backoffice.models.HistoriqueStatusDemande;
+import mg.backoffice.models.Passeport;
+import mg.backoffice.models.Status;
 import mg.backoffice.models.VisaTransformable;
-import mg.backoffice.models.*;
-import mg.backoffice.repositories.AdministrateurRepository;
 import mg.backoffice.repositories.CategorieVisaRepository;
 import mg.backoffice.repositories.DemandeRepository;
+import mg.backoffice.repositories.DemandeurRepository;
 import mg.backoffice.repositories.HistoriqueStatusDemandeRepository;
 import mg.backoffice.repositories.PieceJustificativeRepository;
+import mg.backoffice.repositories.SituationFamilialeRepository;
 import mg.backoffice.repositories.StatusRepository;
 import mg.backoffice.repositories.VisaTransformableRepository;
+
 @Service
 public class DemandeService {
 
-    @Autowired
-    private VisaTransformableRepository visaTransformableRepository;
-
-    @Autowired
-    private PieceJustificativeRepository pieceRepository;
-
-    @Autowired
-    private DemandeRepository demandeRepository;
-
-    @Autowired
-    private HistoriqueStatusDemandeRepository historiqueStatusDemandeRepository;
-
-    @Autowired
-    private StatusRepository statusRepository;
-
-    @Autowired
-    private CategorieVisaRepository categorieVisaRepository;
-
-    @Autowired
-    private AdministrateurRepository administrateurRepository;
+    @Autowired private VisaTransformableRepository visaTransformableRepository;
+    @Autowired private PieceJustificativeRepository pieceRepository;
+    @Autowired private DemandeRepository demandeRepository;
+    @Autowired private HistoriqueStatusDemandeRepository historiqueStatusDemandeRepository;
+    @Autowired private CategorieVisaRepository categorieVisaRepository;
+    @Autowired private SituationFamilialeRepository situationFamilialeRepository;
+    @Autowired private StatusRepository statusRepository;
+    @Autowired private DemandeurRepository demandeurRepository; // C'est ta table 'individu'
 
     @Transactional
+  
+    @SuppressWarnings("BoxingBoxedValue")
     public void soumettreDemande(DemandeFormDTO form) {
 
-        // 1. Vérification du genre
-        if ("M".equalsIgnoreCase(form.getGenre())) {
-            form.setNomJeuneFille(null);
-        } else if ("F".equalsIgnoreCase(form.getGenre())) {
-            // Logique spécifique femme si nécessaire
-        } else {
-            throw new RuntimeException("Demande Invalide : Le genre doit être 'M' ou 'F'.");
-        }
-
-        // 2. Vérification du Visa
-        String numeroVisaForm = form.getRefVisaTransformable() != null ? form.getRefVisaTransformable().trim() : "";
-        VisaTransformable visaActuel = visaTransformableRepository.findByNumeroVisa(numeroVisaForm)
-                .orElseThrow(() -> new RuntimeException("Demande Invalide : Référence de visa transformable au numero '" + numeroVisaForm + "' introuvable."));
+       
+        String refVisa = form.getRefVisaTransformable() != null ? form.getRefVisaTransformable().trim() : "";
+        VisaTransformable visaActuel = visaTransformableRepository.findByNumeroVisa(refVisa)
+                .orElseThrow(() -> new RuntimeException("Demande Invalide : Le visa transformable '" + refVisa + "' est introuvable."));
 
         if (visaActuel.getDateExpiration().isBefore(LocalDate.now())) {
-            throw new RuntimeException("Demande Invalide : Le visa transformable a expiré.");
+            throw new RuntimeException("Demande Invalide : Le visa transformable a expiré. Vous êtes en situation irrégulière.");
         }
 
-        if (visaActuel.getPasseport() == null) {
-            throw new RuntimeException("Demande Invalide : Ce visa n'est lié à aucun passeport en base de données.");
-        }
-        
-        String numeroPasseportSaisi = form.getNumeroPasseport() != null ? form.getNumeroPasseport().trim() : "";
-        if (!visaActuel.getPasseport().getNumeroPasseport().equalsIgnoreCase(numeroPasseportSaisi)) {
-            throw new RuntimeException("Demande Invalide : Le numéro de passeport saisi (" + numeroPasseportSaisi + 
-                                       ") ne correspond pas au passeport associé à ce visa transformable (" + 
-                                       visaActuel.getPasseport().getNumeroPasseport() + ").");
+        Passeport passeportEnBase = visaActuel.getPasseport();
+
+        Demandeur demandeurEnBase = passeportEnBase.getDemandeur(); 
+
+        if (!passeportEnBase.getNumeroPasseport().equalsIgnoreCase(form.getNumeroPasseport().trim())) {
+            throw new RuntimeException("Demande Invalide : Le passeport saisi ne correspond pas à ce visa.");
         }
 
-        // 3. Vérification des pièces
+        if (!demandeurEnBase.getNom().equalsIgnoreCase(form.getNom().trim()) || !demandeurEnBase.getPrenom().equalsIgnoreCase(form.getPrenom().trim())) {
+            throw new RuntimeException("Demande Invalide : Le nom saisi ne correspond pas au titulaire de ce visa enregistré.");
+        }
+        if (!demandeurEnBase.getDateNaissance().equals(form.getDateNaissance())) {
+            throw new RuntimeException("Demande Invalide : La date de naissance ne correspond pas au titulaire de ce visa enregistré.");
+        }
+        if (form.getIdNationalite() != null && demandeurEnBase.getNationalite() != null 
+            && demandeurEnBase.getNationalite().getId() != form.getIdNationalite()) {
+            throw new RuntimeException("Demande Invalide : La nationalité ne correspond pas au titulaire de ce visa enregistré.");
+        }
+
+        demandeurEnBase.setAdresseMada(form.getAdresseMada());
+        demandeurEnBase.setContact(form.getContact());
+        demandeurEnBase.setEmail(form.getEmail().trim());
+
+        if (form.getIdSituationFamiliale() != null) {
+            demandeurEnBase.setSituationFamiliale(
+                situationFamilialeRepository.findById(form.getIdSituationFamiliale())
+                .orElse(demandeurEnBase.getSituationFamiliale())
+            );
+        }
+
+        demandeurRepository.save(demandeurEnBase);
+
         List<Integer> idsPiecesObligatoires = pieceRepository.findIdsPiecesObligatoires(form.getIdCategorieVisa());
-        boolean tousLesDossiersPresents = form.getIdsPiecesFournies().containsAll(idsPiecesObligatoires);
-        
-        if (!tousLesDossiersPresents) {
+        if (form.getIdsPiecesFournies() == null || !form.getIdsPiecesFournies().containsAll(idsPiecesObligatoires)) {
             throw new RuntimeException("Demande Invalide : Un ou plusieurs dossiers obligatoires sont manquants.");
         }
 
-        // 4. SAUVEGARDE EN BASE DE DONNÉES
         CategorieVisa categorie = categorieVisaRepository.findById(form.getIdCategorieVisa())
                 .orElseThrow(() -> new RuntimeException("Catégorie de visa introuvable."));
 
@@ -91,17 +96,18 @@ public class DemandeService {
         nouvelleDemande.setDateTraitement(LocalDate.now()); 
         nouvelleDemande.setVisaTransformable(visaActuel);
         nouvelleDemande.setCategorieVisa(categorie);
+        nouvelleDemande.setDemandeur(demandeurEnBase); 
         
         nouvelleDemande = demandeRepository.save(nouvelleDemande);
 
         Status statutAttente = statusRepository.findByCode("ATT")
-                .orElseThrow(() -> new RuntimeException("Statut 'ATT' introuvable. Veuillez l'insérer dans la table status."));
+                .orElseThrow(() -> new RuntimeException("Statut 'ATT' introuvable en base."));
 
         HistoriqueStatusDemande historique = new HistoriqueStatusDemande();
         historique.setDemande(nouvelleDemande);
         historique.setStatus(statutAttente);
         historique.setDate_status(LocalDateTime.now());
-        historique.setAdmin(null); // Géré par le système lors de la soumission
+        historique.setAdmin(null); 
         
         historiqueStatusDemandeRepository.save(historique);
     }

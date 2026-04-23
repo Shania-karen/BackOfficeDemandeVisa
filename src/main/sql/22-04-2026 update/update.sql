@@ -1,104 +1,143 @@
--- 1. Ajout du champ manquant dans la table demandeur
-ALTER TABLE demandeur
-ADD COLUMN nom_jeune_fille VARCHAR(255),
-ADD COLUMN date_naissance DATE,
-ADD COLUMN genre VARCHAR(1) NOT NULL DEFAULT 'M';
 
--- 2. Insertion des catégories de visa
-INSERT INTO categorie_visa (libelle) VALUES 
-('Investisseur'), 
-('Travailleur'); 
+DROP TABLE IF EXISTS piece_demande CASCADE;
+DROP TABLE IF EXISTS historique_status_demande CASCADE;
+DROP TABLE IF EXISTS demande CASCADE;
+DROP TABLE IF EXISTS carte_resident CASCADE;
+DROP TABLE IF EXISTS visa CASCADE;
+DROP TABLE IF EXISTS visa_transformable CASCADE;
+DROP TABLE IF EXISTS passeport CASCADE;
+DROP TABLE IF EXISTS individu CASCADE;
+DROP TABLE IF EXISTS piece_justificative CASCADE;
+DROP TABLE IF EXISTS administrateur CASCADE;
+DROP TABLE IF EXISTS status CASCADE;
+DROP TABLE IF EXISTS categorie_visa CASCADE;
+DROP TABLE IF EXISTS situation_familiale CASCADE;
+DROP TABLE IF EXISTS nationalite CASCADE;
 
--- Insertion des situations familiales
-INSERT INTO situation_familiale (libelle) VALUES 
-('Célibataire'),
-('Marié(e)'),
-('Divorcé(e)');
+CREATE TABLE nationalite(
+   id SERIAL PRIMARY KEY,
+   libelle VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE situation_familiale(
+   id SERIAL PRIMARY KEY,
+   libelle VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE categorie_visa(
+   id SERIAL PRIMARY KEY,
+   libelle VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE status(
+   id SERIAL PRIMARY KEY,
+   libelle VARCHAR(255) NOT NULL,
+   code VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE administrateur(
+   id SERIAL PRIMARY KEY,
+   nom VARCHAR(255) NOT NULL,
+   identifiant VARCHAR(255) NOT NULL,
+   mot_de_passe VARCHAR(255) NOT NULL,
+   role VARCHAR(50) DEFAULT 'ROLE_ADMIN'
+);
+
+CREATE TABLE piece_justificative(
+   id SERIAL PRIMARY KEY,
+   code VARCHAR(255) NOT NULL,
+   libelle VARCHAR(255) NOT NULL,
+   obligatoire BOOLEAN NOT NULL
+);
+
+CREATE TABLE individu(
+   id SERIAL PRIMARY KEY,
+   nom VARCHAR(255) NOT NULL,
+   prenom VARCHAR(255) NOT NULL,
+   genre VARCHAR(1) NOT NULL DEFAULT 'M',
+   nom_jeune_fille VARCHAR(255),
+   date_naissance DATE NOT NULL,
+   adresse_mada VARCHAR(255) NOT NULL,
+   contact INTEGER NOT NULL,
+   email VARCHAR(255) NOT NULL UNIQUE, 
+   id_situation_familiale INTEGER NOT NULL,
+   id_nationalite INTEGER NOT NULL,
+   FOREIGN KEY(id_situation_familiale) REFERENCES situation_familiale(id),
+   FOREIGN KEY(id_nationalite) REFERENCES nationalite(id)
+);
+
+CREATE TABLE passeport(
+   id SERIAL PRIMARY KEY,
+   numero_passeport VARCHAR(255) NOT NULL,
+   date_naissance DATE NOT NULL,
+   date_delivrance DATE NOT NULL,
+   date_expiration DATE NOT NULL,
+   id_individu INTEGER NOT NULL,
+   FOREIGN KEY(id_individu) REFERENCES individu(id)
+);
+
+CREATE TABLE visa_transformable(
+   id SERIAL PRIMARY KEY,
+   numero_visa VARCHAR(255) NOT NULL,
+   date_entree_territoire DATE NOT NULL,
+   date_sortie_territoire DATE NOT NULL,
+   date_delivrance DATE NOT NULL,
+   date_expiration DATE NOT NULL,
+   id_passeport INTEGER NOT NULL,
+   FOREIGN KEY(id_passeport) REFERENCES passeport(id)
+);
 
 
--- 3. Insertion des pièces justificatives communes (toutes obligatoires pour l'exemple)
-INSERT INTO piece_justificative (code, libelle, obligatoire) VALUES 
-('COM_PHO', '02 photos d''identité', TRUE),
-('COM_NOT', 'Notice de renseignement', TRUE),
-('COM_DEM', 'Demande adressée à Mr le Ministère', TRUE),
-('COM_VIS', 'Photocopie certifiée du visa en cours', TRUE),
-('COM_PAS', 'Photocopie certifiée de la 1ère page du passeport', TRUE),
-('COM_RES', 'Photocopie certifiée de la carte résident', TRUE),
-('COM_CER', 'Certificat de résidence à Madagascar', TRUE),
-('COM_CAS', 'Extrait de casier judiciaire moins de 3 mois', TRUE);
+CREATE TABLE visa(
+   id SERIAL PRIMARY KEY,
+   numero_visa VARCHAR(255) NOT NULL,
+   date_entree_territoire DATE NOT NULL,
+   date_sortie_territoire DATE NOT NULL,
+   date_delivrance DATE NOT NULL,
+   date_expiration DATE NOT NULL,
+   id_passeport INTEGER NOT NULL,
+   FOREIGN KEY(id_passeport) REFERENCES passeport(id)
+);
 
--- 4. Insertion des pièces spécifiques
--- Investisseur
-INSERT INTO piece_justificative (code, libelle, obligatoire) VALUES 
-('INV_STA', 'Statut de la Société', TRUE),
-('INV_REG', 'Extrait d''inscription au registre de commerce', TRUE),
-('INV_FIS', 'Carte fiscale', TRUE);
+CREATE TABLE carte_resident(
+   id SERIAL PRIMARY KEY,
+   numero_carte VARCHAR(255) NOT NULL,
+   date_entree_territoire DATE NOT NULL,
+   date_sortie_territoire DATE NOT NULL,
+   date_delivrance DATE NOT NULL,
+   date_expiration DATE NOT NULL,
+   id_passeport INTEGER NOT NULL,
+   FOREIGN KEY(id_passeport) REFERENCES passeport(id)
+);
 
--- Travailleur
-INSERT INTO piece_justificative (code, libelle, obligatoire) VALUES 
-('TRA_AUT', 'Autorisation emploi délivrée à Madagascar', TRUE),
-('TRA_ATT', 'Attestation d''emploi délivré par l''employeur', TRUE);
 
--- 5. Modifications de structure
--- Suppression constraint id_demandeur dans visa_transformable 
-ALTER TABLE visa_transformable DROP COLUMN id_demandeur;
+CREATE TABLE demande(
+   id SERIAL PRIMARY KEY,
+   date_demande DATE NOT NULL,
+   date_traitement DATE NOT NULL,
+   id_visa_transformable INTEGER NOT NULL,
+   id_categorie_visa INTEGER NOT NULL,
+   id_individu INTEGER NOT NULL,
+   FOREIGN KEY(id_visa_transformable) REFERENCES visa_transformable(id),
+   FOREIGN KEY(id_categorie_visa) REFERENCES categorie_visa(id),
+   FOREIGN KEY(id_individu) REFERENCES individu(id)
+);
 
--- Ajout du lien entre un visa transformable et le passeport sur lequel il se trouve
-ALTER TABLE visa_transformable 
-ADD COLUMN id_passeport INTEGER,
-ADD CONSTRAINT fk_visa_transform_passeport FOREIGN KEY (id_passeport) REFERENCES passeport(id);
+CREATE TABLE historique_status_demande(
+   id SERIAL PRIMARY KEY,
+   date_status TIMESTAMP NOT NULL,
+   id_admin INTEGER,
+   id_status INTEGER NOT NULL,
+   id_demande INTEGER NOT NULL,
+   FOREIGN KEY(id_admin) REFERENCES administrateur(id),
+   FOREIGN KEY(id_status) REFERENCES status(id),
+   FOREIGN KEY(id_demande) REFERENCES demande(id)
+);
 
--- Ajout du demandeur dans la table demande (pour savoir qui fait la demande)
-ALTER TABLE demande 
-ADD COLUMN id_demandeur INTEGER,
-ADD CONSTRAINT fk_demande_demandeur FOREIGN KEY (id_demandeur) REFERENCES demandeur(id);
-
--- 6. Données de test (jeu de test complet)
-
--- Nationalités
-INSERT INTO nationalite (libelle) VALUES 
-('Française'), 
-('Américaine'), 
-('Canadienne');
-
--- Status de demande
-INSERT INTO status (code, libelle) VALUES 
-('ATT', 'En attente'), 
-('VAL', 'Validé'), 
-('REJ', 'Rejeté');
-
--- Demandeurs
--- (Supposons id_situation=1 pour Célibataire, id_nationalite=1 pour Français)
-INSERT INTO demandeur (nom, prenom, adresse_mada, contact, email, id_situation_familiale, id_nationalite, nom_jeune_fille, date_naissance, genre) 
-VALUES ('Dupont', 'Jean', 'Lot 123 Antananarivo', 340000001, 'jean@example.com', 1, 1, '', '1990-05-14', 'M');
-
--- (Supposons id_situation=2 pour Marié(e), id_nationalite=2 pour Américaine)
-INSERT INTO demandeur (nom, prenom, adresse_mada, contact, email, id_situation_familiale, id_nationalite, nom_jeune_fille, date_naissance, genre) 
-VALUES ('Smith', 'Alice', 'Lot 456 Majunga', 320000002, 'alice@example.com', 2, 1, 'Johnson', '1985-11-20', 'F');
-
--- Passeports (Liés aux demandeurs via ID)
-INSERT INTO passeport (numero_passeport, date_naissance, date_delivrance, date_expiration, id_demandeur) VALUES 
-('PASS-FR-001', '1990-05-14', '2020-01-01', '2030-01-01', 1),
-('PASS-US-002', '1985-11-20', '2018-05-10', '2028-05-10', 3);
-
--- Visas transformables (Liés au passeport)
-INSERT INTO visa_transformable (numero_visa, date_entree_territoire, date_sortie_territoire, date_delivrance, date_expiration, id_passeport) VALUES 
-('VT-2026-001', '2026-01-15', '2026-02-15', '2026-01-10', '2026-04-10', 5),
-('VT-2026-002', '2026-03-10', '2026-04-10', '2026-03-05', '2026-06-05', 6);
-
--- Demandes (Liées au visa transformable, à la catégorie de visa et au demandeur)
-INSERT INTO demande (date_demande, date_traitement, id_visa_transformable, id_categorie_visa, id_demandeur) VALUES 
-('2026-04-20', '2026-04-22',8, 1, 1), -- Dupont demande Investisseur (ID 1)
-('2026-04-21', '2026-04-22', 9, 2, 3); -- Smith demande Travailleur (ID 2)
--- Ajout du rôle pour différencier ADMIN et RH
-ALTER TABLE administrateur ADD COLUMN role VARCHAR(50) DEFAULT 'ROLE_ADMIN';
-
--- Un administrateur admin vide pour les tests
-INSERT INTO administrateur (nom, identifiant, mot_de_passe, role) VALUES ('Admin Principal', 'admin', 'admin', 'ROLE_ADMIN');
--- Un lecteur (RH) pour les tests
-INSERT INTO administrateur (nom, identifiant, mot_de_passe, role) VALUES ('Ressources Humaines', 'rh', 'rh123', 'ROLE_RH');
-
--- Historique de statut (Dupont accepté (VAL), Smith en attente (ATT))
-INSERT INTO historique_status_demande (id_demande, id_status, id_admin, date_status) VALUES 
-(1, 2, 1, '2026-04-22 10:00:00'), -- STATUT VAL (id=2) pour la demande de Dupont
-(2, 1, 1, '2026-04-22 10:05:00'); -- STATUT ATT (id=1) pour la demande de Smith
+CREATE TABLE piece_demande(
+   id_demande INTEGER,
+   id_piece INTEGER,
+   PRIMARY KEY(id_demande, id_piece),
+   FOREIGN KEY(id_demande) REFERENCES demande(id),
+   FOREIGN KEY(id_piece) REFERENCES piece_justificative(id)
+);
