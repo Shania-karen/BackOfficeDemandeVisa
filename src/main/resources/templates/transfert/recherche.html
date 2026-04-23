@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recherche Visa - Transfert</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5 mb-5">
+    <div class="card shadow">
+        <div class="card-header bg-info text-white text-center">
+            <h3>Recherche de Visa Existant</h3>
+        </div>
+        <div class="card-body">
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Erreur :</strong> <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <form th:action="@{/transfert/avec-anterieur/recherche}" method="post" th:object="${searchDTO}">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="numeroVisa" class="form-label">Numéro de Visa <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="numeroVisa" name="numeroVisa" 
+                               th:value="*{numeroVisa}" required placeholder="Ex: VIS-2024-00001">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="numeroPasseport" class="form-label">Numéro de Passeport <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="numeroPasseport" name="numeroPasseport" 
+                               th:value="*{numeroPasseport}" required placeholder="Ex: PASS-001">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-info w-100">Rechercher</button>
+            </form>
+
+            <div class="mt-4 text-center">
+                <p>Pas de données antérieures ?</p>
+                <a href="/transfert/sans-anterieur/saisie" class="btn btn-success">Utiliser la saisie complète</a>
+            </div>
+
+            <div class="mt-4 text-center">
+                <a href="/transfert" class="btn btn-secondary">Retour</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

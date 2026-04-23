@@ -28,6 +28,7 @@ import mg.backoffice.repositories.NationaliteRepository;
 import mg.backoffice.repositories.PieceJustificativeRepository;
 import mg.backoffice.repositories.SituationFamilialeRepository;
 import mg.backoffice.repositories.StatusRepository;
+import mg.backoffice.repositories.TypeDemandeRepository;
 
 @Controller
 public class ViewController {
@@ -38,10 +39,19 @@ public class ViewController {
     @Autowired private SituationFamilialeRepository situationRepo;
     @Autowired private CategorieVisaRepository categorieRepo;
     @Autowired private PieceJustificativeRepository pieceRepo;
+    @Autowired private TypeDemandeRepository typeDemandeRepo;
     @Autowired private DemandeRepository demandeRepo;
     @Autowired private HistoriqueStatusDemandeRepository historiqueRepo;
     @Autowired private StatusRepository statusRepo;
     @Autowired private AdministrateurRepository adminRepo;
+
+    /**
+     * Page d'accueil pour les demandes
+     */
+    @GetMapping("/demandes")
+    public String accueilDemandes() {
+        return "demandes-accueil";
+    }
 
     @GetMapping("/demandes/acceptees")
     public String listerDemandesAcceptees(Model model) {
@@ -118,6 +128,7 @@ public class ViewController {
         model.addAttribute("nationalites", nationaliteRepo.findAll());
         model.addAttribute("situations", situationRepo.findAll());
         model.addAttribute("categories", categorieRepo.findAll());
+        model.addAttribute("typesDemande", typeDemandeRepo.findAll());
         model.addAttribute("pieces", pieceRepo.findAll());
         model.addAttribute("demandeForm", new DemandeFormDTO());
         return "demande-form";
@@ -128,7 +139,7 @@ public class ViewController {
 
         System.out.println("Formulaire soumis : " + demandeForm);
         
- 
+
         return "redirect:/demande-visa?success=true";
     }
 }

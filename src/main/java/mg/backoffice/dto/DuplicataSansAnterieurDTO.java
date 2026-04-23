@@ -3,7 +3,10 @@ package mg.backoffice.dto;
 import java.time.LocalDate;
 import java.util.List;
 
-public class DemandeFormDTO {
+/**
+ * DTO pour Duplicata SansAntérieur : saisie complète comme un NOUVEAU_TITRE
+ */
+public class DuplicataSansAnterieurDTO {
     // Infos Demandeur
     private String nom;
     private String prenom;
@@ -12,7 +15,6 @@ public class DemandeFormDTO {
     private LocalDate dateNaissance;
     private Integer idSituationFamiliale;
     private Integer idNationalite;
-    private String domicile;
     private String adresseMada;
     private Integer contact;
     private String email;
@@ -22,22 +24,25 @@ public class DemandeFormDTO {
     private LocalDate dateDelivrancePasseport;
     private LocalDate dateExpirationPasseport;
 
-    // Infos Visa & Demande
-    private Integer idCategorieVisa; // 1 = Travailleur, 2 = Investisseur
-    private Integer idTypeDemande;   // 1 = Duplicata, 2 = Transfert, 3 = Nouveau titre
-    private String refVisaTransformable; // Le numéro du visa existant
-    
-    // Liste des IDs des pièces que l'utilisateur a coché dans le formulaire
+    // Infos Carte Résident à créer
+    private String numeroCarte;
+    private LocalDate dateEntreeCarteResident;
+    private LocalDate dateSortieCarteResident;
+    private LocalDate dateDelivranceCarteResident;
+    private LocalDate dateExpirationCarteResident;
+
+    // Pièces justificatives
     private List<Integer> idsPiecesFournies;
 
+    // Getters et Setters
     public String getNom() { return nom; }
     public void setNom(String nom) { this.nom = nom; }
 
-    public String getGenre() { return genre; }
-    public void setGenre(String genre) { this.genre = genre; }
-
     public String getPrenom() { return prenom; }
     public void setPrenom(String prenom) { this.prenom = prenom; }
+
+    public String getGenre() { return genre; }
+    public void setGenre(String genre) { this.genre = genre; }
 
     public String getNomJeuneFille() { return nomJeuneFille; }
     public void setNomJeuneFille(String nomJeuneFille) { this.nomJeuneFille = nomJeuneFille; }
@@ -50,9 +55,6 @@ public class DemandeFormDTO {
 
     public Integer getIdNationalite() { return idNationalite; }
     public void setIdNationalite(Integer idNationalite) { this.idNationalite = idNationalite; }
-
-    public String getDomicile() { return domicile; }
-    public void setDomicile(String domicile) { this.domicile = domicile; }
 
     public String getAdresseMada() { return adresseMada; }
     public void setAdresseMada(String adresseMada) { this.adresseMada = adresseMada; }
@@ -72,14 +74,20 @@ public class DemandeFormDTO {
     public LocalDate getDateExpirationPasseport() { return dateExpirationPasseport; }
     public void setDateExpirationPasseport(LocalDate dateExpirationPasseport) { this.dateExpirationPasseport = dateExpirationPasseport; }
 
-    public Integer getIdCategorieVisa() { return idCategorieVisa; }
-    public void setIdCategorieVisa(Integer idCategorieVisa) { this.idCategorieVisa = idCategorieVisa; }
+    public String getNumeroCarte() { return numeroCarte; }
+    public void setNumeroCarte(String numeroCarte) { this.numeroCarte = numeroCarte; }
 
-    public Integer getIdTypeDemande() { return idTypeDemande; }
-    public void setIdTypeDemande(Integer idTypeDemande) { this.idTypeDemande = idTypeDemande; }
+    public LocalDate getDateEntreeCarteResident() { return dateEntreeCarteResident; }
+    public void setDateEntreeCarteResident(LocalDate dateEntreeCarteResident) { this.dateEntreeCarteResident = dateEntreeCarteResident; }
 
-    public String getRefVisaTransformable() { return refVisaTransformable; }
-    public void setRefVisaTransformable(String refVisaTransformable) { this.refVisaTransformable = refVisaTransformable; }
+    public LocalDate getDateSortieCarteResident() { return dateSortieCarteResident; }
+    public void setDateSortieCarteResident(LocalDate dateSortieCarteResident) { this.dateSortieCarteResident = dateSortieCarteResident; }
+
+    public LocalDate getDateDelivranceCarteResident() { return dateDelivranceCarteResident; }
+    public void setDateDelivranceCarteResident(LocalDate dateDelivranceCarteResident) { this.dateDelivranceCarteResident = dateDelivranceCarteResident; }
+
+    public LocalDate getDateExpirationCarteResident() { return dateExpirationCarteResident; }
+    public void setDateExpirationCarteResident(LocalDate dateExpirationCarteResident) { this.dateExpirationCarteResident = dateExpirationCarteResident; }
 
     public List<Integer> getIdsPiecesFournies() { return idsPiecesFournies; }
     public void setIdsPiecesFournies(List<Integer> idsPiecesFournies) { this.idsPiecesFournies = idsPiecesFournies; }

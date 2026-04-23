@@ -36,6 +36,10 @@ public class Demande {
     @JoinColumn(name = "id_individu")
     private Demandeur demandeur;
 
+    @ManyToOne
+    @JoinColumn(name = "id_type_demande")
+    private TypeDemande typeDemande;
+
     public int getId() {
         return id;
     }
@@ -82,5 +86,13 @@ public class Demande {
 
     public void setDemandeur(Demandeur demandeur) {
         this.demandeur = demandeur;
+    }
+
+    public TypeDemande getTypeDemande() {
+        return typeDemande;
+    }
+
+    public void setTypeDemande(TypeDemande typeDemande) {
+        this.typeDemande = typeDemande;
     }
 }

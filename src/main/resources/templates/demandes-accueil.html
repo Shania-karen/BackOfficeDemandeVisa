@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil - Demandes de Titre</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5 mb-5">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white text-center">
+            <h2>Demandes de Titre de Séjour</h2>
+            <p class="mb-0">Choisissez le type de demande qui correspond à votre situation</p>
+        </div>
+        <div class="card-body">
+            <div class="row g-4 mt-3">
+                <!-- Duplicata -->
+                <div class="col-md-6">
+                    <div class="card border-success h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">📋 Duplicata de Carte Résident</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Vous souhaitez obtenir un duplicata de votre carte résident perdue, volée ou endommagée.</p>
+                            <ul class="small text-muted">
+                                <li>Avec données antérieures</li>
+                                <li>Sans données antérieures</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <a href="/duplicata" class="btn btn-success w-100">Démarrer</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transfert -->
+                <div class="col-md-6">
+                    <div class="card border-info h-100">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">✈️ Transfert de Visa</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Vous souhaitez transformer votre visa existant en titre de séjour à Madagascar.</p>
+                            <ul class="small text-muted">
+                                <li>Avec données antérieures</li>
+                                <li>Sans données antérieures</li>
+                                <li>Passeport obligatoire</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <a href="/transfert" class="btn btn-info w-100">Démarrer</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vérifier vos demandes -->
+            <div class="mt-5 p-4 border rounded bg-white">
+                <h5>Vérifier l'état de vos demandes</h5>
+                <p class="text-muted">Consultez l'état actuel de vos demandes en cours ou validées.</p>
+                <div class="d-flex gap-2">
+                    <a href="/demandes/attente" class="btn btn-outline-primary">Demandes en attente</a>
+                    <a href="/demandes/acceptees" class="btn btn-outline-success">Demandes acceptées</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
