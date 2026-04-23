@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails de la demande</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>Fiche de Renseignement Demande n° <span th:text="${demande.id}"></span></h4>
+                </div>
+                <div class="card-body">
+                    <div th:if="${demande == null}" class="alert alert-danger">
+                        Demande introuvable.
+                    </div>
+                    
+                    <div th:if="${demande != null}">
+                    <h5 class="text-secondary border-bottom pb-2">Informations Personnelles</h5>
+                        <table class="table table-sm table-borderless">
+                            <tr><th style="width: 30%">Nom :</th> <td th:text="${demande.demandeur?.nom}"></td></tr>
+                            <tr><th>Prénom :</th> <td th:text="${demande.demandeur?.prenom}"></td></tr>
+                            <tr><th>Genre :</th> <td th:text="${demande.demandeur?.genre == 'F' ? 'Féminin' : 'Masculin'}"></td></tr>
+                            <tr th:if="${demande.demandeur?.genre == 'F'}">
+                                <th>Nom de jeune fille :</th> <td th:text="${demande.demandeur?.nomJeuneFille}"></td>
+                            </tr>
+                            <tr><th>Né(e) le :</th> <td th:text="${demande.demandeur?.dateNaissance}"></td></tr>
+                            <tr><th>Situation Familiale :</th> <td th:text="${demande.demandeur?.situationFamiliale?.libelle}"></td></tr>
+                            <tr><th>Nationalité :</th> <td th:text="${demande.demandeur?.nationalite?.libelle}"></td></tr>
+                        </table>
+
+                        <h5 class="text-secondary border-bottom pb-2 mt-4">Coordonnées</h5>
+                        <table class="table table-sm table-borderless">
+                            <tr><th style="width: 30%">Email :</th> <td th:text="${demande.demandeur?.email}"></td></tr>
+                            <tr><th>Contact :</th> <td th:text="${demande.demandeur?.contact}"></td></tr>
+                            <tr><th>Domicile :</th> <td th:text="${demande.demandeur?.adresseMada}"></td></tr>
+                        </table>
+
+                        <h5 class="text-secondary border-bottom pb-2 mt-4">Passeport / Visa</h5>
+                        <table class="table table-sm table-borderless">
+                            <tr><th style="width: 30%">Passeport n° :</th> <td th:text="${demande.visaTransformable?.passeport?.numeroPasseport}"></td></tr>
+                            <tr><th>Visa Transformable :</th> <td th:text="${demande.visaTransformable?.numeroVisa}"></td></tr>
+                            <tr><th>Catégorie de Visa demandée:</th> <td class="fw-bold text-success" th:text="${demande.categorieVisa?.libelle}"></td></tr>
+                            <tr><th>Date de la demande :</th> <td th:text="${demande.dateDemande}"></td></tr>
+                        </table>
+
+                        <div class="mt-4 text-center">
+                            <span sec:authorize="hasRole('ADMIN')">
+                                <form th:action="@{/demande/{id}/valider(id=${demande.id})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-success me-2">Accepter / Valider</button>
+                                </form>
+                                <form th:action="@{/demande/{id}/refuser(id=${demande.id})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger me-2">Refuser</button>
+                                </form>
+                            </span>
+                            
+                            <a th:href="@{/demandes/attente}" class="btn btn-secondary">Retour aux demandes en attente</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

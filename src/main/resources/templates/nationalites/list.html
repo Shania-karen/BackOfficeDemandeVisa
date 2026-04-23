@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Nationalités</title>
+</head>
+<body>
+    <h1>Liste des Nationalités</h1>
+    <a th:href="@{/nationalites/new}">Ajouter une nationalité</a>
+    <br/><br/>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Libellé</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="nationalite : ${nationalites}">
+                <td th:text="${nationalite.id}"></td>
+                <td th:text="${nationalite.libelle}"></td>
+                <td>
+                    <a th:href="@{/nationalites/edit/{id}(id=${nationalite.id})}">Modifier</a>
+                    <a th:href="@{/nationalites/delete/{id}(id=${nationalite.id})}" onclick="return confirm('Êtes-vous sûr ?');">Supprimer</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
