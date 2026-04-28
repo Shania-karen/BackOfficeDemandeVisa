@@ -1,6 +1,7 @@
 package mg.backoffice.models;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -39,6 +41,9 @@ public class Demande {
     @ManyToOne
     @JoinColumn(name = "id_type_demande")
     private TypeDemande typeDemande;
+
+    @OneToMany(mappedBy = "demande")
+    private List<PieceDemande> pieces;
 
     public int getId() {
         return id;
@@ -94,5 +99,13 @@ public class Demande {
 
     public void setTypeDemande(TypeDemande typeDemande) {
         this.typeDemande = typeDemande;
+    }
+
+    public List<PieceDemande> getPieces() {
+        return pieces;
+    }
+
+    public void setPieces(List<PieceDemande> pieces) {
+        this.pieces = pieces;
     }
 }

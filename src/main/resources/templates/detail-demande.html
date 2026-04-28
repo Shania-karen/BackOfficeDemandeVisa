@@ -48,6 +48,47 @@
                             <tr><th>Date de la demande :</th> <td th:text="${demande.dateDemande}"></td></tr>
                         </table>
 
+                        <h5 class="text-secondary border-bottom pb-2 mt-4">Pièces Justificatives</h5>
+                        <div th:if="${#lists.isEmpty(demande.pieces)}" class="alert alert-info">
+                            Aucune pièce justificative fournie.
+                        </div>
+                        <div th:unless="${#lists.isEmpty(demande.pieces)}">
+                            <table class="table table-sm table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Pièce Justificative</th>
+                                        <th>Obligatoire</th>
+                                        <th>Document</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="pieceDemande : ${demande.pieces}">
+                                        <td th:text="${pieceDemande.piece?.libelle}"></td>
+                                        <td class="align-middle">
+                                            <span th:if="${pieceDemande.piece?.obligatoire}" class="badge bg-danger">Obligatoire</span>
+                                            <span th:unless="${pieceDemande.piece?.obligatoire}" class="badge bg-secondary">Optionnelle</span>
+                                        </td>
+                                        <td>
+                                            <!-- Si un fichier est déjà uploade -->
+                                            <div th:if="${pieceDemande.cheminFichier != null}">
+                                                <a th:href="@{/documents/{nomFichier}(nomFichier=${pieceDemande.cheminFichier})}" target="_blank" class="btn btn-sm btn-info">Voir le document</a>
+                                            </div>
+                                            
+                                            <!-- S'il n'y a pas encore de fichier, on affiche le formulaire d'upload -->
+                                            <div th:if="${pieceDemande.cheminFichier == null}">
+                                                <form th:action="@{/demandes/upload-piece}" method="post" enctype="multipart/form-data" class="d-flex align-items-center">
+                                                    <input type="hidden" name="idDemande" th:value="${demande.id}" />
+                                                    <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
+                                                    <input type="file" name="fichier" class="form-control form-control-sm me-2" required accept=".pdf, image/jpeg, image/png">
+                                                    <button type="submit" class="btn btn-sm btn-primary">Importer</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                         <div class="mt-4 text-center">
                             <span sec:authorize="hasRole('ADMIN')">
                                 <form th:action="@{/demande/{id}/valider(id=${demande.id})}" method="post" style="display:inline;">
