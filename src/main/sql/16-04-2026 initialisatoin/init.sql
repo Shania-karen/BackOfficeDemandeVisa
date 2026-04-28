@@ -108,8 +108,8 @@ CREATE TABLE demande(
    id SERIAL,
    date_demande DATE NOT NULL,
    date_traitement DATE NOT NULL,
-   id_visa_transformable INTEGER NOT NULL,
-   id_categorie_visa INTEGER NOT NULL,
+   id_visa_transformable INTEGER,
+   id_categorie_visa INTEGER,
    PRIMARY KEY(id),
    FOREIGN KEY(id_visa_transformable) REFERENCES visa_transformable(id),
    FOREIGN KEY(id_categorie_visa) REFERENCES categorie_visa(id)

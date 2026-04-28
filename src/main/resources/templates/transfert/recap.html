@@ -24,10 +24,10 @@
                     <p><strong>Référence de Demande :</strong> #<span th:text="${demande.id}"></span></p>
                     <p><strong>Type :</strong> <span class="badge bg-info">Transfert</span></p>
                     <p><strong>Statut :</strong> <span class="badge bg-warning">Créée</span></p>
-                    <p><strong>Date :</strong> <span th:text="${#dates.format(demande.dateDemande, 'dd/MM/yyyy')}"></span></p>
+                    <p><strong>Date :</strong> <span th:text="${#temporals.format(demande.dateDemande, 'dd/MM/yyyy')}"></span></p>
                 </div>
                 <div class="col-md-6">
-                    <p><strong>Demandeur :</strong> <span th:text="${demande.demandeur.prenom} + ' ' + ${demande.demandeur.nom}"></span></p>
+                    <p><strong>Demandeur :</strong> <span th:text="|${demande.demandeur.prenom} ${demande.demandeur.nom}|"></span></p>
                     <p><strong>Email :</strong> <span th:text="${demande.demandeur.email}"></span></p>
                     <p><strong>Contact :</strong> <span th:text="${demande.demandeur.contact}"></span></p>
                 </div>

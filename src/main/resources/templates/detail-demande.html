@@ -41,11 +41,29 @@
 
                         <h5 class="text-secondary border-bottom pb-2 mt-4">Passeport / Visa</h5>
                         <table class="table table-sm table-borderless">
-                            <tr><th style="width: 30%">Passeport n° :</th> <td th:text="${demande.visaTransformable?.passeport?.numeroPasseport}"></td></tr>
-                            <tr><th>Visa Transformable :</th> <td th:text="${demande.visaTransformable?.numeroVisa}"></td></tr>
-                            <tr><th>Catégorie de Visa demandée:</th> <td class="fw-bold text-success" th:text="${demande.categorieVisa?.libelle}"></td></tr>
-                            <tr><th>Type de Demande :</th> <td class="fw-bold text-info" th:text="${demande.typeDemande?.libelle}"></td></tr>
-                            <tr><th>Date de la demande :</th> <td th:text="${demande.dateDemande}"></td></tr>
+                            <!-- Passeport : soit du visa transformable, soit du demandeur -->
+                            <tr>
+                                <th style="width: 30%">Passeport n° :</th>
+                                <td th:text="${demande.visaTransformable?.passeport?.numeroPasseport ?: demande.demandeur?.passeports?.size() > 0 ? demande.demandeur.passeports.get(0).numeroPasseport : '-'}"></td>
+                            </tr>
+                            <!-- Visa Transformable : peut être null -->
+                            <tr>
+                                <th>Visa Transformable :</th>
+                                <td th:text="${demande.visaTransformable?.numeroVisa ?: '-'}"></td>
+                            </tr>
+                            <!-- Catégorie Visa : peut être null -->
+                            <tr>
+                                <th>Catégorie de Visa demandée:</th>
+                                <td class="fw-bold text-success" th:text="${demande.categorieVisa?.libelle ?: '-'}"></td>
+                            </tr>
+                            <tr>
+                                <th>Type de Demande :</th>
+                                <td class="fw-bold text-info" th:text="${demande.typeDemande?.libelle}"></td>
+                            </tr>
+                            <tr>
+                                <th>Date de la demande :</th>
+                                <td th:text="${demande.dateDemande}"></td>
+                            </tr>
                         </table>
 
                         <h5 class="text-secondary border-bottom pb-2 mt-4">Pièces Justificatives</h5>
