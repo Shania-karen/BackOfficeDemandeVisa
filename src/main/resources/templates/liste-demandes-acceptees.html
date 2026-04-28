@@ -18,6 +18,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Demandeur</th>
+                                <th>Type de Demande</th>
                                 <th>Date Demande</th>
                                 <th>Catégorie Visa</th>
                                 <th>Nationalité</th>
@@ -28,6 +29,17 @@
                            <tr th:each="demande : ${demandes}">
                                 <td th:text="${demande.id}">1</td>
                                 <td th:text="${demande.demandeur?.nom} + ' ' + ${demande.demandeur?.prenom}">Nom Prénom</td>
+                                <td>
+                                    <span th:if="${demande.typeDemande?.libelle == 'Duplicata'}" class="badge bg-success">
+                                        📋 <span th:text="${demande.typeDemande?.libelle}">Type</span>
+                                    </span>
+                                    <span th:if="${demande.typeDemande?.libelle == 'Transfert'}" class="badge bg-info">
+                                        ✈️ <span th:text="${demande.typeDemande?.libelle}">Type</span>
+                                    </span>
+                                    <span th:if="${demande.typeDemande?.libelle == 'Nouveau titre'}" class="badge bg-primary">
+                                        📄 <span th:text="${demande.typeDemande?.libelle}">Type</span>
+                                    </span>
+                                </td>
                                 <td th:text="${demande.dateDemande}">Date</td>
                                 <td th:text="${demande.categorieVisa?.libelle}">Catégorie</td>
                                 <td th:text="${demande.demandeur?.nationalite?.libelle}">Nationalité</td>
@@ -36,7 +48,7 @@
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(demandes)}">
-                                <td colspan="6" class="text-center text-muted">Aucune demande acceptée trouvée.</td>
+                                <td colspan="7" class="text-center text-muted">Aucune demande acceptée trouvée.</td>
                             </tr>
                         </tbody>
                     </table>

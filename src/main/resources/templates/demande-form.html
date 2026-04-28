@@ -100,13 +100,20 @@
 
                 <h5 class="border-bottom pb-2 mt-4">Type de Visa & Pièces Fournies</h5>
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label">Catégorie de Visa</label>
                         <select class="form-select" name="idCategorieVisa" id="categorieVisa" onchange="updateChecklist()">
                             <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.libelle}"></option>
                         </select>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label class="form-label">Type de Demande</label>
+                        <select class="form-select" name="idTypeDemande" id="typeDemande" required>
+                            <option value="">Sélectionner...</option>
+                            <option th:each="type : ${typesDemande}" th:value="${type.id}" th:text="${type.libelle}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
                         <label class="form-label">Réf Visa Transformable (existant)</label>
                         <input type="text" class="form-control" name="refVisaTransformable" required>
                     </div>

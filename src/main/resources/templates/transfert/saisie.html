@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Transfert - Saisie Complète</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5 mb-5">
+    <div class="card shadow">
+        <div class="card-header bg-info text-white text-center">
+            <h3>Demande de Transfert de Visa - Saisie Complète</h3>
+            <p class="small mb-0 mt-2">Le passeport est obligatoire pour un transfert</p>
+        </div>
+        <div class="card-body">
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Erreur :</strong> <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <form th:action="@{/transfert/sans-anterieur/saisie}" method="post" th:object="${form}">
+                <!-- Informations Personnelles -->
+                <h5 class="border-bottom pb-2 mt-4">Informations Personnelles</h5>
+                
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Genre <span class="text-danger">*</span></label>
+                        <select class="form-select" name="genre" th:field="*{genre}" required>
+                            <option value="M">Masculin</option>
+                            <option value="F">Féminin</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Nom <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="nom" th:field="*{nom}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Prénom <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="prenom" th:field="*{prenom}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Nom de jeune fille</label>
+                        <input type="text" class="form-control" name="nomJeuneFille" th:field="*{nomJeuneFille}">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Né(e) le <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="dateNaissance" th:field="*{dateNaissance}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Situation de famille <span class="text-danger">*</span></label>
+                        <select class="form-select" name="idSituationFamiliale" th:field="*{idSituationFamiliale}" required>
+                            <option value="">Sélectionner...</option>
+                            <option th:each="sit : ${situations}" th:value="${sit.id}" th:text="${sit.libelle}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Nationalité <span class="text-danger">*</span></label>
+                        <select class="form-select" name="idNationalite" th:field="*{idNationalite}" required>
+                            <option value="">Sélectionner...</option>
+                            <option th:each="nat : ${nationalites}" th:value="${nat.id}" th:text="${nat.libelle}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Catégorie de Visa <span class="text-danger">*</span></label>
+                        <select class="form-select" name="idCategorieVisa" th:field="*{idCategorieVisa}" required>
+                            <option value="">Sélectionner...</option>
+                            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.libelle}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Adresse à Madagascar <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="adresseMada" th:field="*{adresseMada}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Contact <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" name="contact" th:field="*{contact}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" name="email" th:field="*{email}" required>
+                    </div>
+                </div>
+
+                <!-- Informations Passeport (OBLIGATOIRE) -->
+                <h5 class="border-bottom pb-2 mt-4">Informations du Passeport <span class="text-danger">*</span></h5>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">N° de Passeport <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="numeroPasseport" th:field="*{numeroPasseport}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Date de délivrance <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="dateDelivrancePasseport" th:field="*{dateDelivrancePasseport}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Date d'expiration <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="dateExpirationPasseport" th:field="*{dateExpirationPasseport}" required>
+                    </div>
+                </div>
+
+                <!-- Informations Visa Transformable -->
+                <h5 class="border-bottom pb-2 mt-4">Informations du Visa Transformable</h5>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label">N° de Visa Transformable <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="numeroVisaTransformable" th:field="*{numeroVisaTransformable}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Date d'entrée <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="dateEntreeVisaTransformable" th:field="*{dateEntreeVisaTransformable}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Date de sortie <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="dateSortieVisaTransformable" th:field="*{dateSortieVisaTransformable}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Date délivrance <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="dateDelivranceVisaTransformable" th:field="*{dateDelivranceVisaTransformable}" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Date d'expiration <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="dateExpirationVisaTransformable" th:field="*{dateExpirationVisaTransformable}" required>
+                    </div>
+                </div>
+
+                <!-- Informations Visa à transférer -->
+                <h5 class="border-bottom pb-2 mt-4">Informations du Visa à Transférer</h5>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label">N° de Visa <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="numeroVisa" th:field="*{numeroVisa}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Date d'entrée <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="dateEntreeVisa" th:field="*{dateEntreeVisa}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Date de sortie <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="dateSortieVisa" th:field="*{dateSortieVisa}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Date délivrance <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="dateDelivranceVisa" th:field="*{dateDelivranceVisa}" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Date d'expiration <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="dateExpirationVisa" th:field="*{dateExpirationVisa}" required>
+                    </div>
+                </div>
+
+                <!-- Pièces Justificatives -->
+                <h5 class="border-bottom pb-2 mt-4">Pièces Justificatives Fournies</h5>
+
+                <div class="p-3 border rounded bg-white">
+                    <div th:each="piece : ${pieces}" class="form-check">
+                        <input class="form-check-input" type="checkbox" name="idsPiecesFournies" th:value="${piece.id}" th:id="'piece_' + ${piece.id}">
+                        <label class="form-check-label" th:for="'piece_' + ${piece.id}">
+                            <span th:text="${piece.libelle}"></span>
+                            <span th:if="${piece.obligatoire}" class="text-danger">(Obligatoire)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-info w-100 mt-4">Soumettre la Demande</button>
+            </form>
+
+            <div class="mt-4 text-center">
+                <a href="/transfert" class="btn btn-secondary">Retour</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

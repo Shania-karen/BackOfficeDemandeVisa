@@ -1,5 +1,6 @@
 
 DROP TABLE IF EXISTS piece_demande CASCADE;
+DROP TABLE IF EXISTS type_demande CASCADE;
 DROP TABLE IF EXISTS historique_status_demande CASCADE;
 DROP TABLE IF EXISTS demande CASCADE;
 DROP TABLE IF EXISTS carte_resident CASCADE;
@@ -111,6 +112,11 @@ CREATE TABLE carte_resident(
 );
 
 
+CREATE TABLE type_demande(
+   id SERIAL PRIMARY KEY,
+   libelle VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE demande(
    id SERIAL PRIMARY KEY,
    date_demande DATE NOT NULL,
@@ -118,9 +124,11 @@ CREATE TABLE demande(
    id_visa_transformable INTEGER NOT NULL,
    id_categorie_visa INTEGER NOT NULL,
    id_individu INTEGER NOT NULL,
+   id_type_demande INTEGER NOT NULL,
    FOREIGN KEY(id_visa_transformable) REFERENCES visa_transformable(id),
    FOREIGN KEY(id_categorie_visa) REFERENCES categorie_visa(id),
-   FOREIGN KEY(id_individu) REFERENCES individu(id)
+   FOREIGN KEY(id_individu) REFERENCES individu(id),
+   FOREIGN KEY(id_type_demande) REFERENCES type_demande(id)
 );
 
 CREATE TABLE historique_status_demande(

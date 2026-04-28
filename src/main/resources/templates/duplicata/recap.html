@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Demande Créée - Duplicata</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5 mb-5">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white text-center">
+            <h3>✓ Demande Créée avec Succès</h3>
+            <p class="small mb-0 mt-2">Duplicata de Carte Résident</p>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Succès !</strong> Votre demande de duplicata a été créée et enregistrée.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <h5 class="mt-4 border-bottom pb-2">Résumé de la Demande</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Référence de Demande :</strong> #<span th:text="${demande.id}"></span></p>
+                    <p><strong>Type :</strong> <span class="badge bg-info">Duplicata</span></p>
+                    <p><strong>Statut :</strong> <span class="badge bg-warning">Créée</span></p>
+                    <p><strong>Date :</strong> <span th:text="${#dates.format(demande.dateDemande, 'dd/MM/yyyy')}"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Demandeur :</strong> <span th:text="${demande.demandeur.prenom} + ' ' + ${demande.demandeur.nom}"></span></p>
+                    <p><strong>Email :</strong> <span th:text="${demande.demandeur.email}"></span></p>
+                    <p><strong>Contact :</strong> <span th:text="${demande.demandeur.contact}"></span></p>
+                </div>
+            </div>
+
+            <h5 class="mt-4 border-bottom pb-2">Prochaines Étapes</h5>
+            <ol>
+                <li>Préparez tous les documents requis</li>
+                <li>Attendez la convocation pour le dépôt de dossier</li>
+                <li>Suivez l'état de votre demande en ligne</li>
+            </ol>
+
+            <div class="alert alert-info mt-4" role="alert">
+                <strong>À retenir :</strong> Conservez bien votre référence de demande #<span th:text="${demande.id}"></span> pour tous vos échanges futurs.
+            </div>
+
+            <div class="mt-4 text-center">
+                <a href="/demandes/attente" class="btn btn-primary">Voir ma demande</a>
+                <a href="/duplicata" class="btn btn-secondary">Nouvelle demande</a>
+                <a href="/" class="btn btn-light">Retour à l'accueil</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

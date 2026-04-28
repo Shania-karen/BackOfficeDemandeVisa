@@ -44,6 +44,7 @@
                             <tr><th style="width: 30%">Passeport n° :</th> <td th:text="${demande.visaTransformable?.passeport?.numeroPasseport}"></td></tr>
                             <tr><th>Visa Transformable :</th> <td th:text="${demande.visaTransformable?.numeroVisa}"></td></tr>
                             <tr><th>Catégorie de Visa demandée:</th> <td class="fw-bold text-success" th:text="${demande.categorieVisa?.libelle}"></td></tr>
+                            <tr><th>Type de Demande :</th> <td class="fw-bold text-info" th:text="${demande.typeDemande?.libelle}"></td></tr>
                             <tr><th>Date de la demande :</th> <td th:text="${demande.dateDemande}"></td></tr>
                         </table>
 

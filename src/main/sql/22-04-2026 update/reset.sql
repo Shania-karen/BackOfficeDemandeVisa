@@ -1,11 +1,11 @@
-
-TRUNCATE TABLE piece_demande, historique_status_demande, demande, visa_transformable, passeport, individu RESTART IDENTITY CASCADE;
+TRUNCATE TABLE piece_demande, historique_status_demande, demande, type_demande, visa_transformable, passeport, individu RESTART IDENTITY CASCADE;
 
 
 INSERT INTO nationalite (libelle) VALUES ('Française'), ('Américaine'), ('Malgache') ON CONFLICT DO NOTHING;
 INSERT INTO situation_familiale (libelle) VALUES ('Célibataire'), ('Marié(e)'), ('Divorcé(e)') ON CONFLICT DO NOTHING;
 INSERT INTO categorie_visa (libelle) VALUES ('Investisseur'), ('Travailleur') ON CONFLICT DO NOTHING;
-INSERT INTO status (code, libelle) VALUES ('ATT', 'En attente'), ('VAL', 'Validé'), ('REJ', 'Rejeté') ON CONFLICT DO NOTHING;
+INSERT INTO status (code, libelle) VALUES ('ATT', 'En attente'), ('VAL', 'Validé'), ('REJ', 'Rejeté'), ('CREEE', 'Créée'), ('APPROUVEE', 'Approuvée') ON CONFLICT DO NOTHING;
+INSERT INTO type_demande (libelle) VALUES ('Duplicata'), ('Transfert'), ('Nouveau titre') ON CONFLICT DO NOTHING;
 
 
 INSERT INTO administrateur (nom, identifiant, mot_de_passe, role) 
