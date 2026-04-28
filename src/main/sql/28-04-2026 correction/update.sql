@@ -1,0 +1,1 @@
+ALTER TABLE piece_demande ADD COLUMN chemin_fichier VARCHAR(255);

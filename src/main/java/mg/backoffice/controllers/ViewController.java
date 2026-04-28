@@ -1,5 +1,14 @@
 package mg.backoffice.controllers;
 
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.StringUtils;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -19,12 +28,15 @@ import mg.backoffice.dto.DemandeFormDTO;
 import mg.backoffice.models.Administrateur;
 import mg.backoffice.models.Demande;
 import mg.backoffice.models.HistoriqueStatusDemande;
+import mg.backoffice.models.PieceDemande;
+import mg.backoffice.models.PieceDemandeId;
 import mg.backoffice.models.Status;
 import mg.backoffice.repositories.AdministrateurRepository;
 import mg.backoffice.repositories.CategorieVisaRepository;
 import mg.backoffice.repositories.DemandeRepository;
 import mg.backoffice.repositories.HistoriqueStatusDemandeRepository;
 import mg.backoffice.repositories.NationaliteRepository;
+import mg.backoffice.repositories.PieceDemandeRepository;
 import mg.backoffice.repositories.PieceJustificativeRepository;
 import mg.backoffice.repositories.SituationFamilialeRepository;
 import mg.backoffice.repositories.StatusRepository;
@@ -44,6 +56,7 @@ public class ViewController {
     @Autowired private HistoriqueStatusDemandeRepository historiqueRepo;
     @Autowired private StatusRepository statusRepo;
     @Autowired private AdministrateurRepository adminRepo;
+    @Autowired private PieceDemandeRepository pieceDemandeRepo;
 
     /**
      * Page d'accueil pour les demandes
@@ -121,6 +134,44 @@ public class ViewController {
     public String refuserDemande(@PathVariable("id") Integer id) {
         changerStatutDemande(id, "REJ");
         return "redirect:/demandes/attente?success=refuser";
+    }
+
+    @PostMapping("/demandes/upload-piece")
+    public String uploadPiece(
+            @RequestParam("idDemande") Integer idDemande,
+            @RequestParam("idPiece") Integer idPiece,
+            @RequestParam("fichier") MultipartFile multipartFile) throws IOException {
+
+        if (!multipartFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            String uniqueFileName = "demande_" + idDemande + "_piece_" + idPiece + "_" + fileName;
+
+            // Définition du dossier de destination: uploads/
+            Path uploadPath = Paths.get("uploads");
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            try (InputStream inputStream = multipartFile.getInputStream()) {
+                Path filePath = uploadPath.resolve(uniqueFileName);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                // Mettre à jour en base de données
+                PieceDemandeId pdId = new PieceDemandeId(idDemande, idPiece);
+                Optional<PieceDemande> pdOpt = pieceDemandeRepo.findById(pdId);
+                
+                if (pdOpt.isPresent()) {
+                    PieceDemande pieceDemande = pdOpt.get();
+                    pieceDemande.setCheminFichier(uniqueFileName);
+                    pieceDemandeRepo.save(pieceDemande);
+                    logger.info("Fichier uploadé et enregistré en base : {}", uniqueFileName);
+                }
+            } catch (IOException ioe) {
+                throw new IOException("Impossible d'enregistrer le fichier: " + fileName, ioe);
+            }
+        }
+        return "redirect:/demande/" + idDemande;
     }
 
     @GetMapping("/demande-visa")

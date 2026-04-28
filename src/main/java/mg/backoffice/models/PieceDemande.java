@@ -5,6 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,6 +23,9 @@ public class PieceDemande {
     @JoinColumn(name = "id_piece")
     private PieceJustificative piece;
 
+    @Column(name = "chemin_fichier")
+    private String cheminFichier;
+
     public Demande getDemande() {
         return demande;
     }
@@ -36,5 +40,13 @@ public class PieceDemande {
 
     public void setPiece(PieceJustificative piece) {
         this.piece = piece;
+    }
+
+    public String getCheminFichier() {
+        return cheminFichier;
+    }
+
+    public void setCheminFichier(String cheminFichier) {
+        this.cheminFichier = cheminFichier;
     }
 }

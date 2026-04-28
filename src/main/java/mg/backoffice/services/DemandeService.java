@@ -21,11 +21,14 @@ import mg.backoffice.repositories.CategorieVisaRepository;
 import mg.backoffice.repositories.DemandeRepository;
 import mg.backoffice.repositories.DemandeurRepository;
 import mg.backoffice.repositories.HistoriqueStatusDemandeRepository;
+import mg.backoffice.repositories.PieceDemandeRepository;
 import mg.backoffice.repositories.PieceJustificativeRepository;
 import mg.backoffice.repositories.SituationFamilialeRepository;
 import mg.backoffice.repositories.StatusRepository;
 import mg.backoffice.repositories.TypeDemandeRepository;
 import mg.backoffice.repositories.VisaTransformableRepository;
+import mg.backoffice.models.PieceDemande;
+import mg.backoffice.models.PieceJustificative;
 
 @Service
 public class DemandeService {
@@ -39,6 +42,7 @@ public class DemandeService {
     @Autowired private StatusRepository statusRepository;
     @Autowired private TypeDemandeRepository typeDemandeRepository;
     @Autowired private DemandeurRepository demandeurRepository; // C'est ta table 'individu'
+    @Autowired private PieceDemandeRepository pieceDemandeRepository;
 
     @Transactional
   
@@ -105,6 +109,22 @@ TypeDemande typeDemande = typeDemandeRepository.findById(form.getIdTypeDemande()
         nouvelleDemande.setDemandeur(demandeurEnBase); 
         
         nouvelleDemande = demandeRepository.save(nouvelleDemande);
+
+        // --- Enregistrer les pièces cochées par l'utilisateur ---
+        if (form.getIdsPiecesFournies() != null) {
+            for (Integer idPiece : form.getIdsPiecesFournies()) {
+                PieceJustificative piece = pieceRepository.findById(idPiece)
+                        .orElseThrow(() -> new RuntimeException("Pièce justificative introuvable avec l'ID: " + idPiece));
+
+                PieceDemande pieceDemande = new PieceDemande();
+                pieceDemande.setDemande(nouvelleDemande);
+                pieceDemande.setPiece(piece);
+                
+                // On enregistre simplement la case cochée, en ignorant le chemin du fichier pour l'instant
+                pieceDemandeRepository.save(pieceDemande);
+            }
+        }
+        // --------------------------------------------------------
 
         Status statutAttente = statusRepository.findByCode("ATT")
                 .orElseThrow(() -> new RuntimeException("Statut 'ATT' introuvable en base."));
