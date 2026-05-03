@@ -134,6 +134,17 @@
 
                 <button type="button" onclick="envoyerDemande()" class="btn btn-success w-100 mt-3">Soumettre la demande</button>
             </form>
+
+            <div id="qrResult" class="mt-4" style="display:none;">
+                <div class="alert alert-success mb-3">
+                    Demande créée avec succès. Scannez ce QR code pour voir la demande depuis un téléphone.
+                </div>
+                <div class="text-center">
+                    <img id="qrImage" alt="QR Code de la demande" class="img-fluid border rounded p-2 bg-white" style="max-width:220px;" />
+                    <p class="mt-3 mb-1 fw-bold">Lien de consultation</p>
+                    <a id="qrLink" href="#" target="_blank" rel="noopener noreferrer"></a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -189,7 +200,20 @@ function envoyerDemande() {
     })
     .then(response => response.text().then(text => ({ status: response.status, text })))
     .then(res => {
-        if (res.status === 200) alert("Succès : " + res.text);
+        if (res.status === 200) {
+            const token = res.text.trim();
+            const scanUrl = `http://192.168.88.6:8080/api/frontoffice/qr/${encodeURIComponent(token)}`;
+            const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(scanUrl)}`;
+
+            document.getElementById('qrImage').src = qrApi;
+
+            const qrLink = document.getElementById('qrLink');
+            qrLink.href = scanUrl;
+            qrLink.textContent = scanUrl;
+
+            document.getElementById('qrResult').style.display = 'block';
+            alert("Succès : Demande soumise.");
+        }
         else alert("Erreur : " + res.text);
     });
 }

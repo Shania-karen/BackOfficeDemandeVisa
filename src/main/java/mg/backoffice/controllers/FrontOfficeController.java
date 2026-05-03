@@ -96,11 +96,53 @@ public class FrontOfficeController {
         return ResponseEntity.badRequest().build();
     }
 
-    // Endpoint pour afficher une demande via token QR
+    // Endpoint pour afficher une demande via token QR (JSON)
     @GetMapping("/scan/{token}")
     public ResponseEntity<Demande> scan(@PathVariable("token") String token) {
         return demandeRepository.findByQrToken(token)
                 .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Endpoint pour afficher une belle page HTML quand on scanne le QR
+    @GetMapping("/qr/{token}")
+    public ResponseEntity<String> qrPage(@PathVariable("token") String token) {
+        return demandeRepository.findByQrToken(token)
+                .map(demande -> {
+                    String lastStatus = "N/A";
+                    String lastStatusDate = "N/A";
+                    HistoriqueStatusDemande last = demandeService.findLastHistoriqueForDemande(demande.getId());
+                    if (last != null) {
+                        lastStatus = last.getStatus() != null ? last.getStatus().getCode() : "N/A";
+                        lastStatusDate = last.getDate_status() != null ? last.getDate_status().toString() : "N/A";
+                    }
+
+                    String html = "<!DOCTYPE html><html lang=\"fr\"><head>"
+                        + "<meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+                        + "<title>Demande #" + demande.getId() + "</title>"
+                        + "<style>"
+                        + "body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; background: #f5f5f5; }"
+                        + ".card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }"
+                        + "h1 { color: #333; margin-top: 0; }"
+                        + ".field { margin: 15px 0; }"
+                        + ".label { font-weight: bold; color: #555; }"
+                        + ".value { font-size: 16px; color: #333; margin-top: 5px; }"
+                        + ".status { display: inline-block; padding: 8px 12px; border-radius: 4px; font-weight: bold; "
+                        + "background: " + ("VAL".equals(lastStatus) ? "#d4edda" : "REJ".equals(lastStatus) ? "#f8d7da" : "#e2e3e5") + "; "
+                        + "color: " + ("VAL".equals(lastStatus) ? "#155724" : "REJ".equals(lastStatus) ? "#721c24" : "#383d41") + "; }"
+                        + "</style>"
+                        + "</head><body>"
+                        + "<div class=\"card\">"
+                        + "<h1>Demande #" + demande.getId() + "</h1>"
+                        + "<div class=\"field\"><span class=\"label\">Type de demande:</span><div class=\"value\">" + (demande.getTypeDemande() != null ? demande.getTypeDemande().getLibelle() : "N/A") + "</div></div>"
+                        + "<div class=\"field\"><span class=\"label\">Catégorie:</span><div class=\"value\">" + (demande.getCategorieVisa() != null ? demande.getCategorieVisa().getLibelle() : "N/A") + "</div></div>"
+                        + "<div class=\"field\"><span class=\"label\">Date de demande:</span><div class=\"value\">" + (demande.getDateDemande() != null ? demande.getDateDemande() : "N/A") + "</div></div>"
+                        + "<div class=\"field\"><span class=\"label\">Statut actuel:</span><div class=\"value\"><span class=\"status\">" + lastStatus + "</span></div></div>"
+                        + "<div class=\"field\"><span class=\"label\">Date du dernier jugement:</span><div class=\"value\">" + lastStatusDate + "</div></div>"
+                        + "</div>"
+                        + "</body></html>";
+                    return ResponseEntity.ok().header("Content-Type", "text/html; charset=UTF-8").body(html);
+                })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
