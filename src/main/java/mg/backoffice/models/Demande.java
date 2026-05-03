@@ -45,6 +45,9 @@ public class Demande {
     @OneToMany(mappedBy = "demande")
     private List<PieceDemande> pieces;
 
+    @Column(name = "qr_token")
+    private String qrToken;
+
     public int getId() {
         return id;
     }
@@ -107,5 +110,13 @@ public class Demande {
 
     public void setPieces(List<PieceDemande> pieces) {
         this.pieces = pieces;
+    }
+
+    public String getQrToken() {
+        return qrToken;
+    }
+
+    public void setQrToken(String qrToken) {
+        this.qrToken = qrToken;
     }
 }

@@ -2,6 +2,7 @@ package mg.backoffice.services;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class DemandeService {
     @Transactional
   
     @SuppressWarnings("BoxingBoxedValue")
-    public void soumettreDemande(DemandeFormDTO form) {
+    public String soumettreDemande(DemandeFormDTO form) {
 
        
         String refVisa = form.getRefVisaTransformable() != null ? form.getRefVisaTransformable().trim() : "";
@@ -136,5 +137,26 @@ TypeDemande typeDemande = typeDemandeRepository.findById(form.getIdTypeDemande()
         historique.setAdmin(null); 
         
         historiqueStatusDemandeRepository.save(historique);
+
+        // Générer un token QR pour cette demande (URL utilisable depuis un téléphone)
+        String token = UUID.randomUUID().toString();
+        nouvelleDemande.setQrToken(token);
+        demandeRepository.save(nouvelleDemande);
+
+        return token;
+    }
+
+    public java.util.List<Demande> findDemandesByPassport(String numeroPasseport) {
+        return demandeRepository.findByVisaTransformable_Passeport_NumeroPasseportOrderByDateDemandeDesc(numeroPasseport);
+    }
+
+    public java.util.List<Demande> findDemandesByDemandeNumber(Integer demandeId) {
+        return demandeRepository.findById(demandeId)
+                .map(d -> demandeRepository.findByDemandeur_IdOrderByDateDemandeDesc(d.getDemandeur().getId()))
+                .orElseGet(java.util.Collections::emptyList);
+    }
+
+    public HistoriqueStatusDemande findLastHistoriqueForDemande(Integer demandeId) {
+        return historiqueStatusDemandeRepository.findLastByDemandeId(demandeId);
     }
 }

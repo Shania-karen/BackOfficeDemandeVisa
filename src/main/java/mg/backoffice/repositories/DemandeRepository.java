@@ -40,4 +40,10 @@ public interface DemandeRepository extends JpaRepository<Demande, Integer> {
            "LEFT JOIN FETCH d.categorieVisa " +
            "WHERE d.id = :id")
     Optional<Demande> findByIdWithRelations(Integer id);
+
+       List<Demande> findByVisaTransformable_Passeport_NumeroPasseportOrderByDateDemandeDesc(String numeroPasseport);
+
+       List<Demande> findByDemandeur_IdOrderByDateDemandeDesc(Integer demandeurId);
+
+       Optional<Demande> findByQrToken(String qrToken);
 }
