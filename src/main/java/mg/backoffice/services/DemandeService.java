@@ -2,8 +2,8 @@ package mg.backoffice.services;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,8 @@ import mg.backoffice.models.Demande;
 import mg.backoffice.models.Demandeur;
 import mg.backoffice.models.HistoriqueStatusDemande;
 import mg.backoffice.models.Passeport;
+import mg.backoffice.models.PieceDemande;
+import mg.backoffice.models.PieceJustificative;
 import mg.backoffice.models.Status;
 import mg.backoffice.models.TypeDemande;
 import mg.backoffice.models.VisaTransformable;
@@ -28,8 +30,6 @@ import mg.backoffice.repositories.SituationFamilialeRepository;
 import mg.backoffice.repositories.StatusRepository;
 import mg.backoffice.repositories.TypeDemandeRepository;
 import mg.backoffice.repositories.VisaTransformableRepository;
-import mg.backoffice.models.PieceDemande;
-import mg.backoffice.models.PieceJustificative;
 
 @Service
 public class DemandeService {
