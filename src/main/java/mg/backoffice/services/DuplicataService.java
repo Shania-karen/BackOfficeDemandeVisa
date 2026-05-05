@@ -16,6 +16,8 @@ import mg.backoffice.models.Demande;
 import mg.backoffice.models.Demandeur;
 import mg.backoffice.models.HistoriqueStatusDemande;
 import mg.backoffice.models.Passeport;
+import mg.backoffice.models.PieceDemande;
+import mg.backoffice.models.PieceDemandeId;
 import mg.backoffice.models.Status;
 import mg.backoffice.models.TypeDemande;
 import mg.backoffice.repositories.CarteResidentRepository;
@@ -24,6 +26,7 @@ import mg.backoffice.repositories.DemandeurRepository;
 import mg.backoffice.repositories.HistoriqueStatusDemandeRepository;
 import mg.backoffice.repositories.NationaliteRepository;
 import mg.backoffice.repositories.PasseportRepository;
+import mg.backoffice.repositories.PieceDemandeRepository;
 import mg.backoffice.repositories.PieceJustificativeRepository;
 import mg.backoffice.repositories.SituationFamilialeRepository;
 import mg.backoffice.repositories.StatusRepository;
@@ -38,6 +41,7 @@ public class DuplicataService {
     @Autowired private DemandeurRepository demandeurRepository;
     @Autowired private PasseportRepository passeportRepository;
     @Autowired private PieceJustificativeRepository pieceRepository;
+    @Autowired private PieceDemandeRepository pieceDemandeRepository;
     @Autowired private SituationFamilialeRepository situationFamilialeRepository;
     @Autowired private NationaliteRepository nationaliteRepository;
     @Autowired private StatusRepository statusRepository;
@@ -73,9 +77,9 @@ public class DuplicataService {
         demandeDuplicata.setDemandeur(demandeur);
         demandeDuplicata = demandeRepository.save(demandeDuplicata);
 
-        // Créer l'historique au statut CREEE
-        Status statusCreee = statusRepository.findByCode("CREEE")
-                .orElseThrow(() -> new RuntimeException("Statut 'CREEE' introuvable."));
+        // Créer l'historique au statut ATT (En attente)
+        Status statusCreee = statusRepository.findByCode("ATT")
+                .orElseThrow(() -> new RuntimeException("Statut 'ATT' (En attente) introuvable."));
 
         HistoriqueStatusDemande historique = new HistoriqueStatusDemande();
         historique.setDemande(demandeDuplicata);
@@ -147,8 +151,8 @@ public class DuplicataService {
         demandeNouveauTitre.setDemandeur(demandeur);
         demandeNouveauTitre = demandeRepository.save(demandeNouveauTitre);
 
-        Status statusApprouvee = statusRepository.findByCode("APPROUVEE")
-                .orElseThrow(() -> new RuntimeException("Statut 'APPROUVEE' introuvable."));
+        Status statusApprouvee = statusRepository.findByCode("VAL")
+                .orElseThrow(() -> new RuntimeException("Statut 'VAL' (Validé) introuvable."));
 
         HistoriqueStatusDemande historiqueNouveau = new HistoriqueStatusDemande();
         historiqueNouveau.setDemande(demandeNouveauTitre);
@@ -157,7 +161,7 @@ public class DuplicataService {
         historiqueNouveau.setAdmin(null);
         historiqueStatusDemandeRepository.save(historiqueNouveau);
 
-        // CRÉER DEMANDE DUPLICATA au statut CREEE
+        // CRÉER DEMANDE DUPLICATA au statut ATT (En attente)
         TypeDemande typeDuplicata = typeDemandeRepository.findById(1)  // ID 1 = Duplicata
                 .orElseThrow(() -> new RuntimeException("Type 'Duplicata' introuvable."));
 
@@ -168,8 +172,8 @@ public class DuplicataService {
         demandeDuplicata.setDemandeur(demandeur);
         demandeDuplicata = demandeRepository.save(demandeDuplicata);
 
-        Status statusCreee = statusRepository.findByCode("CREEE")
-                .orElseThrow(() -> new RuntimeException("Statut 'CREEE' introuvable."));
+        Status statusCreee = statusRepository.findByCode("ATT")
+                .orElseThrow(() -> new RuntimeException("Statut 'ATT' (En attente) introuvable."));
 
         HistoriqueStatusDemande historiqueDuplicata = new HistoriqueStatusDemande();
         historiqueDuplicata.setDemande(demandeDuplicata);
@@ -177,6 +181,17 @@ public class DuplicataService {
         historiqueDuplicata.setDate_status(LocalDateTime.now());
         historiqueDuplicata.setAdmin(null);
         historiqueStatusDemandeRepository.save(historiqueDuplicata);
+
+        // Enregistrer les pièces justificatives fournies
+        if (form.getIdsPiecesFournies() != null && !form.getIdsPiecesFournies().isEmpty()) {
+            for (Integer idPiece : form.getIdsPiecesFournies()) {
+                PieceDemande pieceDemande = new PieceDemande();
+                pieceDemande.setDemande(demandeDuplicata);
+                pieceDemande.setPiece(pieceRepository.findById(idPiece)
+                        .orElseThrow(() -> new RuntimeException("Pièce justificative avec ID " + idPiece + " introuvable")));
+                pieceDemandeRepository.save(pieceDemande);
+            }
+        }
 
         // Retourner les deux demandes créées
         return new DuplicataSansAnterieurResponse(demandeNouveauTitre, demandeDuplicata, carteResident);
