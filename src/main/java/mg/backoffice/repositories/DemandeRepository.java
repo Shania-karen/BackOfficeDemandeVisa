@@ -11,12 +11,12 @@ import mg.backoffice.models.Demande;
 @Repository
 public interface DemandeRepository extends JpaRepository<Demande, Integer> {
     
-    // Requête qui récupère la dernière ligne de statut pour chaque demande, 
-    // et ne garde que celles dont le dernier statut est 'VAL' (Validé)
+       // Requête qui récupère la dernière ligne de statut pour chaque demande,
+       // et ne garde que celles dont le dernier statut est 'VAL' ou 'APPROUVEE'
     @Query(value = "SELECT d.* FROM demande d " +
                    "JOIN historique_status_demande h ON d.id = h.id_demande " +
                    "JOIN status s ON h.id_status = s.id " +
-                   "WHERE s.code = 'VAL' " +
+                               "WHERE s.code IN ('VAL', 'APPROUVEE') " +
                    "AND h.date_status = (SELECT MAX(h2.date_status) FROM historique_status_demande h2 WHERE h2.id_demande = d.id)", 
            nativeQuery = true)
     List<Demande> findDemandesAcceptees();

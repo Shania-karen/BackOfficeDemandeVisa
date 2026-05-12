@@ -9,4 +9,8 @@ import mg.backoffice.models.PieceDemandeId;
 @Repository
 public interface PieceDemandeRepository extends JpaRepository<PieceDemande, PieceDemandeId> {
 
+	long countByDemande_IdAndCheminFichierIsNull(Integer demandeId);
+
+	long countByDemande_Id(Integer demandeId);
+
 }

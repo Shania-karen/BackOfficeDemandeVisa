@@ -126,7 +126,7 @@ public class ViewController {
 
     @PostMapping("/demande/{id}/valider")
     public String validerDemande(@PathVariable("id") Integer id) {
-        changerStatutDemande(id, "VAL");
+        changerStatutDemande(id, "APPROUVEE");
         return "redirect:/demandes/attente?success=valider";
     }
 
@@ -166,12 +166,45 @@ public class ViewController {
                     pieceDemande.setCheminFichier(uniqueFileName);
                     pieceDemandeRepo.save(pieceDemande);
                     logger.info("Fichier uploadé et enregistré en base : {}", uniqueFileName);
+                    enregistrerScanTermineSiToutEstUpload(idDemande);
                 }
             } catch (IOException ioe) {
                 throw new IOException("Impossible d'enregistrer le fichier: " + fileName, ioe);
             }
         }
         return "redirect:/demande/" + idDemande;
+    }
+
+    private void enregistrerScanTermineSiToutEstUpload(Integer idDemande) {
+        long totalPieces = pieceDemandeRepo.countByDemande_Id(idDemande);
+        if (totalPieces == 0) {
+            return;
+        }
+
+        long piecesSansFichier = pieceDemandeRepo.countByDemande_IdAndCheminFichierIsNull(idDemande);
+        if (piecesSansFichier != 0) {
+            return;
+        }
+
+        HistoriqueStatusDemande dernierHistorique = historiqueRepo.findLastByDemandeId(idDemande);
+        if (dernierHistorique != null
+                && dernierHistorique.getStatus() != null
+                && "SCAN_TERMINE".equalsIgnoreCase(dernierHistorique.getStatus().getCode())) {
+            return;
+        }
+
+        Demande demande = demandeRepo.findById(idDemande).orElseThrow();
+        Status scanTermine = statusRepo.findByCode("SCAN_TERMINE")
+                .orElseThrow(() -> new IllegalStateException("Statut 'SCAN_TERMINE' introuvable en base."));
+
+        HistoriqueStatusDemande historique = new HistoriqueStatusDemande();
+        historique.setDemande(demande);
+        historique.setStatus(scanTermine);
+        historique.setAdmin(null);
+        historique.setDate_status(LocalDateTime.now());
+
+        historiqueRepo.save(historique);
+        logger.info("✓ Statut SCAN_TERMINE ajouté pour la demande {}", idDemande);
     }
 
     @GetMapping("/demande-visa")
