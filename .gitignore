@@ -34,3 +34,4 @@ build/
 struct.sql
 *.png
 uploads/demande_2_piece_1_ArtTuneDB.url
+logs/application.log
