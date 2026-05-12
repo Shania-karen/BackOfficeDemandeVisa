@@ -32,3 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 struct.sql
+uploads/demande_2_piece_1_ArtTuneDB.url
+*.png
