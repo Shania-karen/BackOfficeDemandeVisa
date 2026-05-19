@@ -1,6 +1,7 @@
 package mg.backoffice.models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -47,6 +48,13 @@ public class Demande {
 
     @Column(name = "qr_token")
     private String qrToken;
+    
+    @Column(name = "etat_dossier")
+    private String etatDossier = "BROUILLON";
+    // BROUILLON, PHOTO_EN_COURS, SCAN_EN_COURS, FINALISE
+    
+    @Column(name = "date_qr_genere")
+    private LocalDateTime dateQrGenere;
 
     public int getId() {
         return id;
@@ -118,5 +126,21 @@ public class Demande {
 
     public void setQrToken(String qrToken) {
         this.qrToken = qrToken;
+    }
+    
+    public String getEtatDossier() {
+        return etatDossier;
+    }
+    
+    public void setEtatDossier(String etatDossier) {
+        this.etatDossier = etatDossier;
+    }
+    
+    public LocalDateTime getDateQrGenere() {
+        return dateQrGenere;
+    }
+    
+    public void setDateQrGenere(LocalDateTime dateQrGenere) {
+        this.dateQrGenere = dateQrGenere;
     }
 }

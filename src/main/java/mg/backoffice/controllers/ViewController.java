@@ -41,6 +41,7 @@ import mg.backoffice.repositories.PieceJustificativeRepository;
 import mg.backoffice.repositories.SituationFamilialeRepository;
 import mg.backoffice.repositories.StatusRepository;
 import mg.backoffice.repositories.TypeDemandeRepository;
+import mg.backoffice.services.PieceUploadService;
 
 @Controller
 public class ViewController {
@@ -57,6 +58,7 @@ public class ViewController {
     @Autowired private StatusRepository statusRepo;
     @Autowired private AdministrateurRepository adminRepo;
     @Autowired private PieceDemandeRepository pieceDemandeRepo;
+    @Autowired private PieceUploadService pieceUploadService;
 
     /**
      * Page d'accueil pour les demandes
@@ -164,8 +166,24 @@ public class ViewController {
                 if (pdOpt.isPresent()) {
                     PieceDemande pieceDemande = pdOpt.get();
                     pieceDemande.setCheminFichier(uniqueFileName);
+                    
+                    // Synchroniser avec le nouveau système d'états
+                    if (idPiece == 1) {
+                        pieceDemande.setCheminPhoto("uploads/" + uniqueFileName);
+                        pieceDemande.setDatePhoto(LocalDateTime.now());
+                        pieceDemande.setEtatPiece("PHOTO_PRISE");
+                    } else {
+                        pieceDemande.setCheminScan("uploads/" + uniqueFileName);
+                        pieceDemande.setDateScan(LocalDateTime.now());
+                        pieceDemande.setEtatPiece("SCAN_TERMINE");
+                    }
+                    
                     pieceDemandeRepo.save(pieceDemande);
                     logger.info("Fichier uploadé et enregistré en base : {}", uniqueFileName);
+                    
+                    // Mettre à jour l'état général du dossier
+                    pieceUploadService.updateEtatDossier(idDemande);
+                    
                     enregistrerScanTermineSiToutEstUpload(idDemande);
                 }
             } catch (IOException ioe) {
@@ -176,13 +194,15 @@ public class ViewController {
     }
 
     private void enregistrerScanTermineSiToutEstUpload(Integer idDemande) {
-        long totalPieces = pieceDemandeRepo.countByDemande_Id(idDemande);
-        if (totalPieces == 0) {
+        Demande demande = demandeRepo.findById(idDemande).orElse(null);
+        if (demande == null || demande.getPieces() == null || demande.getPieces().isEmpty()) {
             return;
         }
 
-        long piecesSansFichier = pieceDemandeRepo.countByDemande_IdAndCheminFichierIsNull(idDemande);
-        if (piecesSansFichier != 0) {
+        boolean toutEstUpload = demande.getPieces().stream()
+                .allMatch(p -> p.getCheminFichier() != null || p.getCheminPhoto() != null || p.getCheminScan() != null);
+
+        if (!toutEstUpload) {
             return;
         }
 
@@ -193,7 +213,6 @@ public class ViewController {
             return;
         }
 
-        Demande demande = demandeRepo.findById(idDemande).orElseThrow();
         Status scanTermine = statusRepo.findByCode("SCAN_TERMINE")
                 .orElseThrow(() -> new IllegalStateException("Statut 'SCAN_TERMINE' introuvable en base."));
 

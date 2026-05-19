@@ -2,167 +2,597 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Détails de la demande</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la Demande - Titre de Séjour</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.8);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-primary: #4f46e5; /* Indigo */
+            --accent-success: #10b981; /* Emerald */
+            --accent-info: #06b6d4;    /* Cyan */
+            --accent-warning: #f59e0b; /* Amber */
+            --accent-danger: #ef4444;  /* Red */
+            
+            --glass-glow: 0 20px 40px rgba(15, 23, 42, 0.06);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+                radial-gradient(at 90% 90%, rgba(6, 182, 212, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2.5rem 0;
+        }
+
+        .main-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            box-shadow: var(--glass-glow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title-block h3 {
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.25rem;
+            background: linear-gradient(135deg, #0f172a 40%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Dossier Stepper Progress */
+        .stepper-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(15, 23, 42, 0.05);
+            border-radius: 14px;
+            padding: 0.5rem 1rem;
+        }
+
+        .stepper-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+        }
+
+        .stepper-dot.active {
+            background: var(--accent-warning);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+
+        .stepper-dot.completed {
+            background: var(--accent-success);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        }
+
+        .stepper-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .stepper-label.active {
+            color: var(--text-primary);
+        }
+
+        /* Sidebar Info Card styles */
+        .info-section-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-primary);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(15, 23, 42, 0.05);
+            border-radius: 14px;
+            padding: 0.9rem 1.2rem;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.2rem;
+        }
+
+        .info-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Supporting Documents Cards */
+        .doc-card {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(15, 23, 42, 0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .doc-card:hover {
+            border-color: rgba(15, 23, 42, 0.12);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
+        }
+
+        .doc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.2rem;
+            gap: 1rem;
+        }
+
+        .doc-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .badge-mandatory {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            background: rgba(239, 68, 68, 0.08);
+            color: var(--accent-danger);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+        }
+
+        .badge-optional {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            background: rgba(15, 23, 42, 0.03);
+            color: var(--text-secondary);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+        }
+
+        /* State Badges */
+        .state-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .state-brouillon { background: rgba(15, 23, 42, 0.03); color: var(--text-secondary); border: 1px solid rgba(15, 23, 42, 0.06); }
+        .state-photo-prise { background: rgba(6, 182, 212, 0.08); color: #0891b2; border: 1px solid rgba(6, 182, 212, 0.15); }
+        .state-photo-term { background: rgba(99, 102, 241, 0.08); color: var(--accent-primary); border: 1px solid rgba(99, 102, 241, 0.15); }
+        .state-scan-term { background: rgba(16, 185, 129, 0.08); color: #059669; border: 1px solid rgba(16, 185, 129, 0.15); }
+
+        /* Action Buttons */
+        .btn-modern {
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.55rem 1.1rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-primary-modern { background: linear-gradient(135deg, var(--accent-primary) 0%, #4338ca 100%); color: white; }
+        .btn-primary-modern:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(99, 102, 241, 0.2); color: white; }
+        .btn-primary-modern:disabled { background: rgba(15, 23, 42, 0.05); color: rgba(15, 23, 42, 0.25); transform: none; box-shadow: none; }
+
+        .btn-success-modern { background: linear-gradient(135deg, var(--accent-success) 0%, #059669 100%); color: white; }
+        .btn-success-modern:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2); color: white; }
+
+        .btn-danger-modern { background: linear-gradient(135deg, var(--accent-danger) 0%, #dc2626 100%); color: white; }
+        .btn-danger-modern:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(239, 68, 68, 0.2); color: white; }
+
+        .btn-outline-modern {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            color: var(--text-primary);
+        }
+        .btn-outline-modern:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(15, 23, 42, 0.15);
+            color: #0f172a;
+        }
+
+        /* Integrated camera & drawing design */
+        .special-panel {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px dashed rgba(15, 23, 42, 0.12);
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .camera-video {
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            border-radius: 12px;
+            background: #000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .drawing-canvas {
+            background: #ffffff;
+            border: 2px solid rgba(15, 23, 42, 0.1);
+            border-radius: 12px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+            cursor: crosshair;
+        }
+
+        .action-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .d-none { display: none !important; }
+    </style>
 </head>
-<body class="bg-light">
-<div class="container mt-5 mb-5">
-    <div class="row">
-        <div class="col-md-10 offset-md-1">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
-                    <h4>Fiche de Renseignement Demande n° <span th:text="${demande.id}"></span></h4>
+<body>
+<div class="main-container">
+    <div th:if="${demande == null}" class="glass-card text-center py-5">
+        <i class="bi bi-exclamation-triangle text-danger fs-1 mb-3"></i>
+        <h3>Demande introuvable</h3>
+        <p class="text-secondary">Le dossier que vous cherchez n'existe pas ou a été supprimé.</p>
+        <a th:href="@{/demandes/attente}" class="btn-modern btn-outline-modern mt-3">Retour à la liste</a>
+    </div>
+
+    <div th:if="${demande != null}">
+        <!-- Page Header Panel -->
+        <div class="glass-card dashboard-header">
+            <div class="header-title-block">
+                <h3>Fiche de Renseignement</h3>
+                <div class="text-secondary small font-monospace">Dossier de Demande N° <span th:text="${demande.id}"></span></div>
+            </div>
+            
+            <!-- Stepper Progress Tracker -->
+            <div class="stepper-progress" th:with="isFinalised=${demande.etatDossier == 'FINALISE'}">
+                <span class="stepper-dot completed"></span>
+                <span class="stepper-label stepper-label.active">Soumis</span>
+                <i class="bi bi-chevron-right text-secondary small"></i>
+                
+                <span class="stepper-dot" th:classappend="${demande.etatDossier != 'BROUILLON'} ? 'completed' : 'active'"></span>
+                <span class="stepper-label" th:classappend="${demande.etatDossier != 'BROUILLON'} ? 'text-primary' : 'active'">Traitement</span>
+                <i class="bi bi-chevron-right text-secondary small"></i>
+                
+                <span class="stepper-dot" th:classappend="${isFinalised} ? 'completed' : ''"></span>
+                <span class="stepper-label" th:classappend="${isFinalised} ? 'text-primary' : ''">Finalisé</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- LEFT COLUMN: Fiche de Renseignement -->
+            <div class="col-lg-5">
+                <div class="glass-card">
+                    <h5 class="info-section-title">
+                        <i class="bi bi-person-fill"></i>
+                        Informations Personnelles
+                    </h5>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Nom Complet</div>
+                            <div class="info-value" th:text="${demande.demandeur?.nom} + ' ' + ${demande.demandeur?.prenom}">Nom Prénom</div>
+                        </div>
+                        <div class="info-item" th:if="${demande.demandeur?.genre == 'F'}">
+                            <div class="info-label">Nom de jeune fille</div>
+                            <div class="info-value" th:text="${demande.demandeur?.nomJeuneFille}">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Genre & Né(e) le</div>
+                            <div class="info-value">
+                                <span th:text="${demande.demandeur?.genre == 'F' ? 'Féminin' : 'Masculin'}"></span>
+                                <span class="text-secondary font-monospace mx-1">|</span>
+                                <span th:text="${demande.demandeur?.dateNaissance}" class="font-monospace">01/01/1990</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Situation & Nationalité</div>
+                            <div class="info-value">
+                                <span th:text="${demande.demandeur?.situationFamiliale?.libelle}">Célibataire</span>
+                                <span class="text-secondary font-monospace mx-1">|</span>
+                                <span th:text="${demande.demandeur?.nationalite?.libelle}" class="text-info fw-bold">Nationalité</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="info-section-title">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        Coordonnées
+                    </h5>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value font-monospace" th:text="${demande.demandeur?.email}">email@domain.com</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Téléphone / Contact</div>
+                            <div class="info-value font-monospace" th:text="${demande.demandeur?.contact}">+261...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Adresse Domicile (Madagascar)</div>
+                            <div class="info-value" th:text="${demande.demandeur?.adresseMada}">Adresse...</div>
+                        </div>
+                    </div>
+
+                    <h5 class="info-section-title">
+                        <i class="bi bi-passport-fill"></i>
+                        Passeport & Voyage
+                    </h5>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Passeport N°</div>
+                            <div class="info-value font-monospace fw-bold" th:text="${demande.visaTransformable?.passeport?.numeroPasseport ?: demande.demandeur?.passeports?.size() > 0 ? demande.demandeur.passeports.get(0).numeroPasseport : '-'}"></div>
+                        </div>
+                        <div class="info-item" th:if="${demande.visaTransformable != null}">
+                            <div class="info-label">Visa Transformable N°</div>
+                            <div class="info-value font-monospace" th:text="${demande.visaTransformable?.numeroVisa}"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Catégorie Visa demandée</div>
+                            <div class="info-value text-success fw-bold" th:text="${demande.categorieVisa?.libelle ?: '-'}"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Type & Date de Demande</div>
+                            <div class="info-value">
+                                <span class="text-info" th:text="${demande.typeDemande?.libelle}">Type</span>
+                                <span class="text-secondary font-monospace mx-1">|</span>
+                                <span class="text-secondary font-monospace" th:text="${demande.dateDemande}">Date</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div th:if="${demande == null}" class="alert alert-danger">
-                        Demande introuvable.
+            </div>
+
+            <!-- RIGHT COLUMN: Supporting Documents -->
+            <div class="col-lg-7">
+                <div class="glass-card">
+                    <h5 class="info-section-title">
+                        <i class="bi bi-folder-fill"></i>
+                        Gestion des Pièces Justificatives
+                    </h5>
+
+                    <!-- Alert Banner: State of Dossier -->
+                    <div class="alert border-0 rounded-4 p-3 d-flex align-items-center justify-content-between mb-4" 
+                         th:classappend="${demande.etatDossier == 'FINALISE'} ? 'bg-success bg-opacity-10 text-success' : 'bg-warning bg-opacity-10 text-warning'">
+                        <div>
+                            <i class="bi me-2" th:classappend="${demande.etatDossier == 'FINALISE'} ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'"></i>
+                            État Global : <strong th:text="${demande.etatDossier ?: 'BROUILLON'}"></strong>
+                        </div>
+                        <div>
+                            <a th:href="@{/demandes/apercu-tous/{id}(id=${demande.id})}" class="btn-modern btn-outline-modern py-1 px-3 fs-8 me-1" target="_blank">
+                                <i class="bi bi-eye"></i> Aperçu Global
+                            </a>
+                            <a th:if="${demande.etatDossier == 'FINALISE'}" 
+                               th:href="@{/demandes/generer-lettre-reception/{id}(id=${demande.id})}" 
+                               class="btn-modern btn-success-modern py-1 px-3 fs-8" target="_blank">
+                                <i class="bi bi-file-pdf"></i> Lettre PDF
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- List of Supporting Documents -->
+                    <div th:if="${#lists.isEmpty(demande.pieces)}" class="alert alert-info border-0 rounded-4 bg-info bg-opacity-10 text-info">
+                        <i class="bi bi-info-circle me-2"></i>Aucune pièce justificative requise.
                     </div>
                     
-                    <div th:if="${demande != null}">
-                    <h5 class="text-secondary border-bottom pb-2">Informations Personnelles</h5>
-                        <table class="table table-sm table-borderless">
-                            <tr><th style="width: 30%">Nom :</th> <td th:text="${demande.demandeur?.nom}"></td></tr>
-                            <tr><th>Prénom :</th> <td th:text="${demande.demandeur?.prenom}"></td></tr>
-                            <tr><th>Genre :</th> <td th:text="${demande.demandeur?.genre == 'F' ? 'Féminin' : 'Masculin'}"></td></tr>
-                            <tr th:if="${demande.demandeur?.genre == 'F'}">
-                                <th>Nom de jeune fille :</th> <td th:text="${demande.demandeur?.nomJeuneFille}"></td>
-                            </tr>
-                            <tr><th>Né(e) le :</th> <td th:text="${demande.demandeur?.dateNaissance}"></td></tr>
-                            <tr><th>Situation Familiale :</th> <td th:text="${demande.demandeur?.situationFamiliale?.libelle}"></td></tr>
-                            <tr><th>Nationalité :</th> <td th:text="${demande.demandeur?.nationalite?.libelle}"></td></tr>
-                        </table>
+                    <div th:unless="${#lists.isEmpty(demande.pieces)}">
+                        <!-- Supporting Document Cards Grid -->
+                        <div th:each="pieceDemande : ${demande.pieces}" class="doc-card">
+                            <div class="doc-header">
+                                <div>
+                                    <div class="doc-title" th:text="${pieceDemande.piece?.libelle}">Libellé Document</div>
+                                    <div class="mt-2 d-flex flex-wrap gap-2">
+                                        <span th:if="${pieceDemande.piece?.obligatoire}" class="badge-mandatory">Obligatoire</span>
+                                        <span th:unless="${pieceDemande.piece?.obligatoire}" class="badge-optional">Optionnelle</span>
+                                        
+                                        <!-- State Badge -->
+                                        <span th:if="${pieceDemande.etatPiece == 'BROUILLON' or pieceDemande.etatPiece == null}" class="state-badge state-brouillon">
+                                            <i class="bi bi-slash-circle"></i> En attente
+                                        </span>
+                                        <span th:if="${pieceDemande.etatPiece == 'PHOTO_PRISE'}" class="state-badge state-photo-prise">
+                                            <i class="bi bi-camera"></i> Photo prise
+                                        </span>
+                                        <span th:if="${pieceDemande.etatPiece == 'PHOTO_TERMINEE'}" class="state-badge state-photo-term">
+                                            <i class="bi bi-camera-fill"></i> Photo validée
+                                        </span>
+                                        <span th:if="${pieceDemande.etatPiece == 'SCAN_TERMINE' or pieceDemande.etatPiece == 'FINALISEE'}" class="state-badge state-scan-term">
+                                            <i class="bi bi-check-all"></i> Document Finalisé
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <h5 class="text-secondary border-bottom pb-2 mt-4">Coordonnées</h5>
-                        <table class="table table-sm table-borderless">
-                            <tr><th style="width: 30%">Email :</th> <td th:text="${demande.demandeur?.email}"></td></tr>
-                            <tr><th>Contact :</th> <td th:text="${demande.demandeur?.contact}"></td></tr>
-                            <tr><th>Domicile :</th> <td th:text="${demande.demandeur?.adresseMada}"></td></tr>
-                        </table>
+                            <!-- Integrated Actions Control Panel -->
+                            <div class="p-3 bg-white bg-opacity-5 rounded-4 border border-white border-opacity-5 mt-2">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <!-- Photo Upload Button -->
+                                    <form th:action="@{/demandes/upload-photo}" method="post" enctype="multipart/form-data" class="d-inline">
+                                        <input type="hidden" name="idDemande" th:value="${demande.id}" />
+                                        <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
+                                        <input type="file" name="fichier" accept="image/jpeg,image/png" style="display:none;" th:id="'photo_' + ${pieceDemande.piece.id}" onchange="this.form.submit()" />
+                                        <label th:for="'photo_' + ${pieceDemande.piece.id}" class="btn-modern btn-outline-modern py-1 px-2.5 fs-8">
+                                            <i class="bi bi-camera text-primary"></i> Photo Fichier
+                                        </label>
+                                    </form>
 
-                        <h5 class="text-secondary border-bottom pb-2 mt-4">Passeport / Visa</h5>
-                        <table class="table table-sm table-borderless">
-                            <!-- Passeport : soit du visa transformable, soit du demandeur -->
-                            <tr>
-                                <th style="width: 30%">Passeport n° :</th>
-                                <td th:text="${demande.visaTransformable?.passeport?.numeroPasseport ?: demande.demandeur?.passeports?.size() > 0 ? demande.demandeur.passeports.get(0).numeroPasseport : '-'}"></td>
-                            </tr>
-                            <!-- Visa Transformable : peut être null -->
-                            <tr>
-                                <th>Visa Transformable :</th>
-                                <td th:text="${demande.visaTransformable?.numeroVisa ?: '-'}"></td>
-                            </tr>
-                            <!-- Catégorie Visa : peut être null -->
-                            <tr>
-                                <th>Catégorie de Visa demandée:</th>
-                                <td class="fw-bold text-success" th:text="${demande.categorieVisa?.libelle ?: '-'}"></td>
-                            </tr>
-                            <tr>
-                                <th>Type de Demande :</th>
-                                <td class="fw-bold text-info" th:text="${demande.typeDemande?.libelle}"></td>
-                            </tr>
-                            <tr>
-                                <th>Date de la demande :</th>
-                                <td th:text="${demande.dateDemande}"></td>
-                            </tr>
-                        </table>
+                                    <!-- Scan Upload Button -->
+                                    <form th:action="@{/demandes/upload-scan}" method="post" enctype="multipart/form-data" class="d-inline">
+                                        <input type="hidden" name="idDemande" th:value="${demande.id}" />
+                                        <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
+                                        <input type="file" name="fichier" accept=".pdf,image/jpeg,image/png" style="display:none;" th:id="'scan_' + ${pieceDemande.piece.id}" onchange="this.form.submit()" />
+                                        <label th:for="'scan_' + ${pieceDemande.piece.id}" class="btn-modern btn-outline-modern py-1 px-2.5 fs-8">
+                                            <i class="bi bi-file-pdf text-success"></i> Scan Fichier
+                                        </label>
+                                    </form>
 
-                        <h5 class="text-secondary border-bottom pb-2 mt-4">Pièces Justificatives</h5>
-                        <div th:if="${#lists.isEmpty(demande.pieces)}" class="alert alert-info">
-                            Aucune pièce justificative fournie.
-                        </div>
-                        <div th:unless="${#lists.isEmpty(demande.pieces)}">
-                            <table class="table table-sm table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Pièce Justificative</th>
-                                        <th>Obligatoire</th>
-                                        <th>Document</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="pieceDemande : ${demande.pieces}">
-                                        <td th:text="${pieceDemande.piece?.libelle}"></td>
-                                        <td class="align-middle">
-                                            <span th:if="${pieceDemande.piece?.obligatoire}" class="badge bg-danger">Obligatoire</span>
-                                            <span th:unless="${pieceDemande.piece?.obligatoire}" class="badge bg-secondary">Optionnelle</span>
-                                        </td>
-                                        <td>
-                                            <!-- Si un fichier est déjà uploade -->
-                                            <div th:if="${pieceDemande.cheminFichier != null}">
-                                                <a th:href="@{/documents/{nomFichier}(nomFichier=${pieceDemande.cheminFichier})}" target="_blank" class="btn btn-sm btn-info">Voir le document</a>
-                                            </div>
-                                            
-                                            <!-- S'il n'y a pas encore de fichier, on affiche le formulaire d'upload -->
-                                            <div th:if="${pieceDemande.cheminFichier == null}">
-                                                <form th:if="${pieceDemande.piece.id == 1}" th:action="@{/demandes/upload-piece}" method="post" enctype="multipart/form-data" class="camera-upload-form border rounded p-2">
-                                                    <input type="hidden" name="idDemande" th:value="${demande.id}" />
-                                                    <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
-                                                    <input type="file" name="fichier" class="camera-file-input d-none" required accept="image/jpeg,image/png">
+                                    <!-- View/Preview Button if available -->
+                                    <a th:if="${pieceDemande.cheminScan != null or pieceDemande.cheminPhoto != null or pieceDemande.cheminFichier != null}"
+                                       th:href="@{/demandes/apercu/{idDemande}/{idPiece}(idDemande=${demande.id}, idPiece=${pieceDemande.piece.id})}"
+                                       class="btn-modern btn-primary-modern py-1 px-2.5 fs-8" target="_blank">
+                                        <i class="bi bi-eye"></i> Aperçu
+                                    </a>
+                                </div>
 
-                                                    <div class="small fw-semibold mb-2">Capture caméra (pièce id 1)</div>
-                                                    <video class="camera-video border rounded w-100 mb-2" autoplay playsinline muted style="max-height: 220px;"></video>
-                                                    <img class="camera-preview border rounded w-100 mb-2 d-none" alt="Aperçu de la photo" style="max-height: 220px; object-fit: contain;">
+                                <!-- Custom Camera Panel (Piece ID 1 Only) -->
+                                <div th:if="${pieceDemande.piece.id == 1 and pieceDemande.cheminFichier == null and pieceDemande.cheminPhoto == null}" class="special-panel mt-3">
+                                    <form th:action="@{/demandes/upload-piece}" method="post" enctype="multipart/form-data" class="camera-upload-form m-0">
+                                        <input type="hidden" name="idDemande" th:value="${demande.id}" />
+                                        <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
+                                        <input type="file" name="fichier" class="camera-file-input d-none" required accept="image/jpeg,image/png">
 
-                                                    <div class="d-flex flex-wrap gap-2">
-                                                        <button type="button" class="btn btn-sm btn-outline-primary camera-start-btn">Activer caméra</button>
-                                                        <button type="button" class="btn btn-sm btn-outline-success camera-capture-btn" disabled>Prendre photo</button>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary camera-retake-btn d-none">Reprendre</button>
-                                                        <button type="submit" class="btn btn-sm btn-primary camera-submit-btn" disabled>Importer</button>
-                                                    </div>
-                                                </form>
+                                        <div class="small text-secondary fw-semibold mb-2"><i class="bi bi-webcam me-1"></i>Prendre photo via webcam</div>
+                                        <video class="camera-video border rounded-3 w-100 mb-2" autoplay playsinline muted style="max-height: 220px;"></video>
+                                        <img class="camera-preview border rounded-3 w-100 mb-2 d-none" alt="Aperçu de la photo" style="max-height: 220px; object-fit: contain;">
 
-                                                <form th:if="${pieceDemande.piece.id == 2}" th:action="@{/demandes/upload-piece}" method="post" enctype="multipart/form-data" class="drawing-upload-form border rounded p-2">
-                                                    <input type="hidden" name="idDemande" th:value="${demande.id}" />
-                                                    <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
-                                                    <input type="file" name="fichier" class="drawing-file-input d-none" required accept="image/png,image/jpeg">
+                                        <div class="action-flex">
+                                            <button type="button" class="btn-modern btn-outline-modern py-1 px-2.5 fs-8 camera-start-btn">Activer caméra</button>
+                                            <button type="button" class="btn-modern btn-success-modern py-1 px-2.5 fs-8 camera-capture-btn" disabled>Prendre photo</button>
+                                            <button type="button" class="btn-modern btn-outline-modern py-1 px-2.5 fs-8 camera-retake-btn d-none">Reprendre</button>
+                                            <button type="submit" class="btn-modern btn-primary-modern py-1 px-2.5 fs-8 camera-submit-btn" disabled>Importer</button>
+                                        </div>
+                                    </form>
+                                </div>
 
-                                                    <div class="small fw-semibold mb-2">Dessiner la pièce (id 2)</div>
-                                                    <canvas class="drawing-canvas border rounded w-100 mb-2" width="700" height="260" style="touch-action: none;"></canvas>
+                                <!-- Custom Tablet-Styled Drawing Canvas Panel (Piece ID 2 Only) -->
+                                <div th:if="${pieceDemande.piece.id == 2 and pieceDemande.cheminFichier == null and pieceDemande.cheminScan == null}" class="special-panel mt-3">
+                                    <form th:action="@{/demandes/upload-piece}" method="post" enctype="multipart/form-data" class="drawing-upload-form m-0">
+                                        <input type="hidden" name="idDemande" th:value="${demande.id}" />
+                                        <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
+                                        <input type="file" name="fichier" class="drawing-file-input d-none" required accept="image/png,image/jpeg">
 
-                                                    <div class="d-flex flex-wrap gap-2">
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary drawing-clear-btn">Effacer</button>
-                                                        <button type="button" class="btn btn-sm btn-outline-success drawing-save-btn">Valider dessin</button>
-                                                        <button type="submit" class="btn btn-sm btn-primary drawing-submit-btn" disabled>Importer</button>
-                                                    </div>
-                                                </form>
+                                        <div class="small text-secondary fw-semibold mb-2"><i class="bi bi-pencil-square me-1"></i>Dessiner la signature / pièce</div>
+                                        <div class="overflow-auto">
+                                            <canvas class="drawing-canvas w-100 mb-2" width="700" height="230" style="touch-action: none; min-width: 500px;"></canvas>
+                                        </div>
 
-                                                <form th:if="${pieceDemande.piece.id != 1 and pieceDemande.piece.id != 2}" th:action="@{/demandes/upload-piece}" method="post" enctype="multipart/form-data" class="d-flex align-items-center">
-                                                    <input type="hidden" name="idDemande" th:value="${demande.id}" />
-                                                    <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
-                                                    <input type="file" name="fichier" class="form-control form-control-sm me-2" required accept=".pdf, image/jpeg, image/png">
-                                                    <button type="submit" class="btn btn-sm btn-primary">Importer</button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                        <div class="action-flex">
+                                            <button type="button" class="btn-modern btn-outline-modern py-1 px-2.5 fs-8 drawing-clear-btn">Effacer</button>
+                                            <button type="button" class="btn-modern btn-success-modern py-1 px-2.5 fs-8 drawing-save-btn">Valider dessin</button>
+                                            <button type="submit" class="btn-modern btn-primary-modern py-1 px-2.5 fs-8 drawing-submit-btn" disabled>Importer</button>
+                                        </div>
+                                    </form>
+                                </div>
 
-                        <div class="mt-4 text-center">
-                            <span sec:authorize="hasRole('ADMIN')" th:with="missingPieces=${demande.pieces.?[cheminFichier == null]}, allUploaded=${missingPieces.size() == 0}">
-                                <!-- Affichage du statut des scans -->
-                                <p th:if="${!allUploaded}" class="text-warning fw-bold">Scan pas encore terminé</p>
-                                <p th:if="${allUploaded}" class="text-success fw-bold">Scan terminé</p>
+                                <!-- Simple Standard File Form for other missing files -->
+                                <div th:if="${pieceDemande.piece.id != 1 and pieceDemande.piece.id != 2 and pieceDemande.cheminFichier == null and pieceDemande.cheminScan == null}" class="mt-3">
+                                    <form th:action="@{/demandes/upload-piece}" method="post" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
+                                        <input type="hidden" name="idDemande" th:value="${demande.id}" />
+                                        <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
+                                        <input type="file" name="fichier" class="form-control form-control-sm border-dark border-opacity-10 bg-transparent text-dark me-2" required accept=".pdf, image/jpeg, image/png">
+                                        <button type="submit" class="btn-modern btn-primary-modern py-1.5 px-3">Importer</button>
+                                    </form>
+                                </div>
 
-                                <form th:action="@{/demande/{id}/valider(id=${demande.id})}" method="post" style="display:inline;">
-                                    <button type="submit" class="btn me-2" th:classappend="${allUploaded} ? 'btn-success' : 'btn-secondary'" th:disabled="${!allUploaded}">Accepter / Valider</button>
-                                </form>
-                                <form th:action="@{/demande/{id}/refuser(id=${demande.id})}" method="post" style="display:inline;">
-                                    <button type="submit" class="btn btn-danger me-2">Refuser</button>
-                                </form>
-                            </span>
-                            
-                            <a th:href="@{/demandes/attente}" class="btn btn-secondary">Retour aux demandes en attente</a>
+                                <!-- Display uploaded filename if from the old flow -->
+                                <div th:if="${pieceDemande.cheminFichier != null}" class="mt-2 text-secondary small">
+                                    <i class="bi bi-file-earmark-check me-1"></i>Fichier importé : <span class="font-monospace" th:text="${pieceDemande.cheminFichier}"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Validation Control Center Bottom Bar -->
+        <div class="glass-card mt-4" sec:authorize="hasRole('ADMIN')" th:with="missingPieces=${demande.pieces.?[cheminFichier == null && cheminPhoto == null && cheminScan == null]}, allUploaded=${missingPieces.size() == 0}">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <h5 class="m-0 fw-bold"><i class="bi bi-shield-check text-primary me-2"></i>Administration du dossier</h5>
+                    <p class="text-secondary small m-0 mt-1">
+                        Statut : 
+                        <span th:if="${allUploaded}" class="text-success fw-bold"><i class="bi bi-check-all me-1"></i>Tous les scans sont terminés</span>
+                        <span th:if="${!allUploaded}" class="text-warning fw-bold"><i class="bi bi-hourglass me-1"></i>Scans partiels, pièce(s) manquante(s)</span>
+                    </p>
+                </div>
+                <div class="d-flex gap-2">
+                    <form th:action="@{/demande/{id}/valider(id=${demande.id})}" method="post" class="m-0">
+                        <button type="submit" class="btn-modern btn-success-modern" th:disabled="${!allUploaded}">
+                            <i class="bi bi-check-circle"></i> Accepter & Valider
+                        </button>
+                    </form>
+                    <form th:action="@{/demande/{id}/refuser(id=${demande.id})}" method="post" class="m-0">
+                        <button type="submit" class="btn-modern btn-danger-modern">
+                            <i class="bi bi-x-circle"></i> Refuser le dossier
+                        </button>
+                    </form>
+                    <a th:href="@{/demandes/attente}" class="btn-modern btn-outline-modern">
+                        Retour à la liste
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Core Camera and Canvas Javascript Engine -->
 <script>
-    (function () {
+    (document.onload = function () {
         function assignBlobToFileInput(fileInput, blob, fileName) {
             const file = new File([blob], fileName, { type: blob.type });
             const dataTransfer = new DataTransfer();
@@ -265,7 +695,7 @@
                 context.fillStyle = '#ffffff';
                 context.fillRect(0, 0, canvas.width, canvas.height);
                 context.strokeStyle = '#111111';
-                context.lineWidth = 2;
+                context.lineWidth = 3;
                 context.lineCap = 'round';
                 context.lineJoin = 'round';
 
