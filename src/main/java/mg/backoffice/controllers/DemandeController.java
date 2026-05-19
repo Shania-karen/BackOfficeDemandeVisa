@@ -20,10 +20,10 @@ public class DemandeController {
     @PostMapping("/soumettre")
     public ResponseEntity<String> soumettreDemande(@RequestBody DemandeFormDTO form) {
         try {
-            demandeService.soumettreDemande(form);
-            return ResponseEntity.ok("Demande soumise avec succès.");
+            String token = demandeService.soumettreDemande(form);
+            return ResponseEntity.ok(token);
         } catch (RuntimeException e) {
-            // Si le visa est expiré ou qu'il manque des pièces, ça tombe ici
+           
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

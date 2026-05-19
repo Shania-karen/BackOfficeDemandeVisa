@@ -94,7 +94,39 @@
                                             
                                             <!-- S'il n'y a pas encore de fichier, on affiche le formulaire d'upload -->
                                             <div th:if="${pieceDemande.cheminFichier == null}">
-                                                <form th:action="@{/demandes/upload-piece}" method="post" enctype="multipart/form-data" class="d-flex align-items-center">
+                                                <form th:if="${pieceDemande.piece.id == 1}" th:action="@{/demandes/upload-piece}" method="post" enctype="multipart/form-data" class="camera-upload-form border rounded p-2">
+                                                    <input type="hidden" name="idDemande" th:value="${demande.id}" />
+                                                    <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
+                                                    <input type="file" name="fichier" class="camera-file-input d-none" required accept="image/jpeg,image/png">
+
+                                                    <div class="small fw-semibold mb-2">Capture caméra (pièce id 1)</div>
+                                                    <video class="camera-video border rounded w-100 mb-2" autoplay playsinline muted style="max-height: 220px;"></video>
+                                                    <img class="camera-preview border rounded w-100 mb-2 d-none" alt="Aperçu de la photo" style="max-height: 220px; object-fit: contain;">
+
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <button type="button" class="btn btn-sm btn-outline-primary camera-start-btn">Activer caméra</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-success camera-capture-btn" disabled>Prendre photo</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary camera-retake-btn d-none">Reprendre</button>
+                                                        <button type="submit" class="btn btn-sm btn-primary camera-submit-btn" disabled>Importer</button>
+                                                    </div>
+                                                </form>
+
+                                                <form th:if="${pieceDemande.piece.id == 2}" th:action="@{/demandes/upload-piece}" method="post" enctype="multipart/form-data" class="drawing-upload-form border rounded p-2">
+                                                    <input type="hidden" name="idDemande" th:value="${demande.id}" />
+                                                    <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
+                                                    <input type="file" name="fichier" class="drawing-file-input d-none" required accept="image/png,image/jpeg">
+
+                                                    <div class="small fw-semibold mb-2">Dessiner la pièce (id 2)</div>
+                                                    <canvas class="drawing-canvas border rounded w-100 mb-2" width="700" height="260" style="touch-action: none;"></canvas>
+
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary drawing-clear-btn">Effacer</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-success drawing-save-btn">Valider dessin</button>
+                                                        <button type="submit" class="btn btn-sm btn-primary drawing-submit-btn" disabled>Importer</button>
+                                                    </div>
+                                                </form>
+
+                                                <form th:if="${pieceDemande.piece.id != 1 and pieceDemande.piece.id != 2}" th:action="@{/demandes/upload-piece}" method="post" enctype="multipart/form-data" class="d-flex align-items-center">
                                                     <input type="hidden" name="idDemande" th:value="${demande.id}" />
                                                     <input type="hidden" name="idPiece" th:value="${pieceDemande.piece.id}" />
                                                     <input type="file" name="fichier" class="form-control form-control-sm me-2" required accept=".pdf, image/jpeg, image/png">
@@ -108,9 +140,13 @@
                         </div>
 
                         <div class="mt-4 text-center">
-                            <span sec:authorize="hasRole('ADMIN')">
+                            <span sec:authorize="hasRole('ADMIN')" th:with="missingPieces=${demande.pieces.?[cheminFichier == null]}, allUploaded=${missingPieces.size() == 0}">
+                                <!-- Affichage du statut des scans -->
+                                <p th:if="${!allUploaded}" class="text-warning fw-bold">Scan pas encore terminé</p>
+                                <p th:if="${allUploaded}" class="text-success fw-bold">Scan terminé</p>
+
                                 <form th:action="@{/demande/{id}/valider(id=${demande.id})}" method="post" style="display:inline;">
-                                    <button type="submit" class="btn btn-success me-2">Accepter / Valider</button>
+                                    <button type="submit" class="btn me-2" th:classappend="${allUploaded} ? 'btn-success' : 'btn-secondary'" th:disabled="${!allUploaded}">Accepter / Valider</button>
                                 </form>
                                 <form th:action="@{/demande/{id}/refuser(id=${demande.id})}" method="post" style="display:inline;">
                                     <button type="submit" class="btn btn-danger me-2">Refuser</button>
@@ -125,5 +161,188 @@
         </div>
     </div>
 </div>
+<script>
+    (function () {
+        function assignBlobToFileInput(fileInput, blob, fileName) {
+            const file = new File([blob], fileName, { type: blob.type });
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInput.files = dataTransfer.files;
+        }
+
+        function setupCameraForms() {
+            const forms = document.querySelectorAll('.camera-upload-form');
+
+            forms.forEach((form) => {
+                const video = form.querySelector('.camera-video');
+                const preview = form.querySelector('.camera-preview');
+                const startBtn = form.querySelector('.camera-start-btn');
+                const captureBtn = form.querySelector('.camera-capture-btn');
+                const retakeBtn = form.querySelector('.camera-retake-btn');
+                const submitBtn = form.querySelector('.camera-submit-btn');
+                const fileInput = form.querySelector('.camera-file-input');
+                let stream = null;
+
+                async function startCamera() {
+                    try {
+                        stream = await navigator.mediaDevices.getUserMedia({
+                            video: { facingMode: 'environment' },
+                            audio: false
+                        });
+                        video.srcObject = stream;
+                        captureBtn.disabled = false;
+                        startBtn.disabled = true;
+                    } catch (err) {
+                        alert('Impossible d\'activer la caméra: ' + err.message);
+                    }
+                }
+
+                function stopCamera() {
+                    if (!stream) {
+                        return;
+                    }
+                    stream.getTracks().forEach((track) => track.stop());
+                    stream = null;
+                }
+
+                startBtn.addEventListener('click', startCamera);
+
+                captureBtn.addEventListener('click', () => {
+                    if (!video.videoWidth || !video.videoHeight) {
+                        return;
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const context = canvas.getContext('2d');
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    canvas.toBlob((blob) => {
+                        if (!blob) {
+                            return;
+                        }
+
+                        assignBlobToFileInput(fileInput, blob, 'camera_piece_1.png');
+                        preview.src = URL.createObjectURL(blob);
+                        preview.classList.remove('d-none');
+                        retakeBtn.classList.remove('d-none');
+                        submitBtn.disabled = false;
+                        captureBtn.disabled = true;
+                        stopCamera();
+                        video.classList.add('d-none');
+                    }, 'image/png');
+                });
+
+                retakeBtn.addEventListener('click', async () => {
+                    preview.classList.add('d-none');
+                    video.classList.remove('d-none');
+                    retakeBtn.classList.add('d-none');
+                    submitBtn.disabled = true;
+                    captureBtn.disabled = true;
+                    await startCamera();
+                });
+
+                form.addEventListener('submit', () => {
+                    stopCamera();
+                });
+            });
+        }
+
+        function setupDrawingForms() {
+            const forms = document.querySelectorAll('.drawing-upload-form');
+
+            forms.forEach((form) => {
+                const canvas = form.querySelector('.drawing-canvas');
+                const clearBtn = form.querySelector('.drawing-clear-btn');
+                const saveBtn = form.querySelector('.drawing-save-btn');
+                const submitBtn = form.querySelector('.drawing-submit-btn');
+                const fileInput = form.querySelector('.drawing-file-input');
+                const context = canvas.getContext('2d');
+                let drawing = false;
+                let hasDrawn = false;
+
+                context.fillStyle = '#ffffff';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                context.strokeStyle = '#111111';
+                context.lineWidth = 2;
+                context.lineCap = 'round';
+                context.lineJoin = 'round';
+
+                function getPosition(event) {
+                    const rect = canvas.getBoundingClientRect();
+                    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+                    const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+                    return {
+                        x: ((clientX - rect.left) / rect.width) * canvas.width,
+                        y: ((clientY - rect.top) / rect.height) * canvas.height
+                    };
+                }
+
+                function startDraw(event) {
+                    event.preventDefault();
+                    const pos = getPosition(event);
+                    drawing = true;
+                    context.beginPath();
+                    context.moveTo(pos.x, pos.y);
+                }
+
+                function draw(event) {
+                    if (!drawing) {
+                        return;
+                    }
+                    event.preventDefault();
+                    const pos = getPosition(event);
+                    context.lineTo(pos.x, pos.y);
+                    context.stroke();
+                    hasDrawn = true;
+                }
+
+                function endDraw() {
+                    drawing = false;
+                    context.closePath();
+                }
+
+                canvas.addEventListener('mousedown', startDraw);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', endDraw);
+                canvas.addEventListener('mouseleave', endDraw);
+                canvas.addEventListener('touchstart', startDraw, { passive: false });
+                canvas.addEventListener('touchmove', draw, { passive: false });
+                canvas.addEventListener('touchend', endDraw);
+
+                clearBtn.addEventListener('click', () => {
+                    context.fillStyle = '#ffffff';
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                    hasDrawn = false;
+                    submitBtn.disabled = true;
+                    fileInput.value = '';
+                });
+
+                saveBtn.addEventListener('click', () => {
+                    if (!hasDrawn) {
+                        alert('Veuillez dessiner avant de valider.');
+                        return;
+                    }
+
+                    canvas.toBlob((blob) => {
+                        if (!blob) {
+                            return;
+                        }
+                        assignBlobToFileInput(fileInput, blob, 'dessin_piece_2.png');
+                        submitBtn.disabled = false;
+                    }, 'image/png');
+                });
+            });
+        }
+
+        if (window.File && window.DataTransfer && navigator.mediaDevices) {
+            setupCameraForms();
+        }
+        if (window.File && window.DataTransfer) {
+            setupDrawingForms();
+        }
+    })();
+</script>
 </body>
 </html>
