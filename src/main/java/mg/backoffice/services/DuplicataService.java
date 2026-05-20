@@ -2,22 +2,20 @@ package mg.backoffice.services;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import mg.backoffice.dto.DuplicataSearchDTO;
 import mg.backoffice.dto.DuplicataSansAnterieurDTO;
+import mg.backoffice.dto.DuplicataSearchDTO;
 import mg.backoffice.models.CarteResident;
 import mg.backoffice.models.Demande;
 import mg.backoffice.models.Demandeur;
 import mg.backoffice.models.HistoriqueStatusDemande;
 import mg.backoffice.models.Passeport;
 import mg.backoffice.models.PieceDemande;
-import mg.backoffice.models.PieceDemandeId;
 import mg.backoffice.models.Status;
 import mg.backoffice.models.TypeDemande;
 import mg.backoffice.repositories.CarteResidentRepository;
@@ -151,6 +149,12 @@ public class DuplicataService {
         demandeNouveauTitre.setDemandeur(demandeur);
         demandeNouveauTitre = demandeRepository.save(demandeNouveauTitre);
 
+        // Générer un token QR unique
+        String tokenQRNouveau = UUID.randomUUID().toString();
+        demandeNouveauTitre.setQrToken(tokenQRNouveau);
+        demandeNouveauTitre.setDateQrGenere(LocalDateTime.now());
+        demandeNouveauTitre = demandeRepository.save(demandeNouveauTitre);
+
         Status statusApprouvee = statusRepository.findByCode("VAL")
                 .orElseThrow(() -> new RuntimeException("Statut 'VAL' (Validé) introuvable."));
 
@@ -170,6 +174,12 @@ public class DuplicataService {
         demandeDuplicata.setDateTraitement(LocalDate.now());
         demandeDuplicata.setTypeDemande(typeDuplicata);
         demandeDuplicata.setDemandeur(demandeur);
+        demandeDuplicata = demandeRepository.save(demandeDuplicata);
+
+        // Générer un token QR unique pour le duplicata
+        String tokenQRDuplicata = UUID.randomUUID().toString();
+        demandeDuplicata.setQrToken(tokenQRDuplicata);
+        demandeDuplicata.setDateQrGenere(LocalDateTime.now());
         demandeDuplicata = demandeRepository.save(demandeDuplicata);
 
         Status statusCreee = statusRepository.findByCode("ATT")

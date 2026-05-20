@@ -2,21 +2,19 @@ package mg.backoffice.services;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import mg.backoffice.dto.TransfertSearchDTO;
 import mg.backoffice.dto.TransfertSansAnterieurDTO;
+import mg.backoffice.dto.TransfertSearchDTO;
 import mg.backoffice.models.Demande;
 import mg.backoffice.models.Demandeur;
 import mg.backoffice.models.HistoriqueStatusDemande;
 import mg.backoffice.models.Passeport;
 import mg.backoffice.models.PieceDemande;
-import mg.backoffice.models.PieceDemandeId;
 import mg.backoffice.models.Status;
 import mg.backoffice.models.TypeDemande;
 import mg.backoffice.models.Visa;
@@ -173,6 +171,12 @@ public class TransfertService {
         demandeNouveauTitre.setVisaTransformable(visaTransformable);
         demandeNouveauTitre = demandeRepository.save(demandeNouveauTitre);
 
+        // Générer un token QR unique
+        String tokenQRNouveau = UUID.randomUUID().toString();
+        demandeNouveauTitre.setQrToken(tokenQRNouveau);
+        demandeNouveauTitre.setDateQrGenere(LocalDateTime.now());
+        demandeNouveauTitre = demandeRepository.save(demandeNouveauTitre);
+
         Status statusApprouvee = statusRepository.findByCode("VAL")
                 .orElseThrow(() -> new RuntimeException("Statut 'VAL' (Validé) introuvable."));
 
@@ -193,6 +197,12 @@ public class TransfertService {
         demandeTransfert.setTypeDemande(typeTransfert);
         demandeTransfert.setDemandeur(demandeur);
         demandeTransfert.setVisaTransformable(visaTransformable);
+        demandeTransfert = demandeRepository.save(demandeTransfert);
+
+        // Générer un token QR unique pour le transfert
+        String tokenQRTransfert = UUID.randomUUID().toString();
+        demandeTransfert.setQrToken(tokenQRTransfert);
+        demandeTransfert.setDateQrGenere(LocalDateTime.now());
         demandeTransfert = demandeRepository.save(demandeTransfert);
 
         Status statusCreee = statusRepository.findByCode("ATT")

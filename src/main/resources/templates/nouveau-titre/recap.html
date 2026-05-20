@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande Créée - Nouveau Titre</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.8);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-primary: #4f46e5;
+            --accent-success: #10b981;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(16, 185, 129, 0.06) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(6, 182, 212, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 3rem 0;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .success-header {
+            background: linear-gradient(135deg, var(--accent-success) 0%, #059669 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: checkmark 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes checkmark {
+            0% {
+                transform: scale(0) rotate(-45deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .success-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .success-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.95;
+            margin: 0.5rem 0 0 0;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #047857;
+            border-radius: 12px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-primary);
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid rgba(79, 70, 229, 0.1);
+            padding-bottom: 0.8rem;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-item {
+            background: rgba(79, 70, 229, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.3rem;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .badge-type {
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-nouveau {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(6, 182, 212, 0.1));
+            color: var(--accent-primary);
+            border: 1px solid rgba(79, 70, 229, 0.2);
+        }
+
+        .steps-container {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .steps-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .steps-list li {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: flex-start;
+        }
+
+        .steps-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            background: var(--accent-primary);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .step-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(6, 182, 212, 0.05));
+            border-left: 4px solid var(--accent-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .download-code {
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            margin-top: 0.5rem;
+        }
+
+        .actions-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-custom {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.85rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--accent-primary), #6366f1);
+            color: white;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-secondary-custom {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--accent-primary);
+            border: 1px solid rgba(79, 70, 229, 0.2);
+        }
+
+        .btn-secondary-custom:hover {
+            background: rgba(79, 70, 229, 0.15);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .btn-light-custom {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-primary);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-light-custom:hover {
+            background: rgba(0, 0, 0, 0.08);
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <div class="glass-card">
+        <!-- Succès Header -->
+        <div class="success-header">
+            <div class="success-icon">✓</div>
+            <h1 class="success-title">Demande Créée avec Succès</h1>
+            <p class="success-subtitle">Nouveau Titre de Séjour</p>
+        </div>
+
+        <!-- Message de succès -->
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i>
+            <strong>Excellente nouvelle !</strong> Votre demande de nouveau titre de séjour a été créée et enregistrée avec succès dans le système.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Résumé de la Demande -->
+        <div>
+            <h3 class="section-title">
+                <i class="bi bi-file-earmark"></i> Résumé de la Demande
+            </h3>
+
+            <div class="info-row">
+                <div class="info-item">
+                    <div class="info-label">Référence de Demande</div>
+                    <div class="info-value" style="font-size: 1.3rem; color: var(--accent-primary);">
+                        #<span th:text="${demande.id}"></span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Type de Demande</div>
+                    <div class="info-value">
+                        <span class="badge-type badge-nouveau">
+                            <i class="bi bi-file-check"></i> Nouveau Titre
+                        </span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Statut</div>
+                    <div class="info-value">
+                        <span class="badge bg-success">Validée</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-item">
+                    <div class="info-label">Date de Demande</div>
+                    <div class="info-value">
+                        <span th:text="*{#temporals.format(demande.dateDemande, 'dd/MM/yyyy')}"></span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Date de Traitement</div>
+                    <div class="info-value">
+                        <span th:text="*{#temporals.format(demande.dateTraitement, 'dd/MM/yyyy')}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informations du Demandeur -->
+        <div>
+            <h3 class="section-title">
+                <i class="bi bi-person"></i> Informations du Demandeur
+            </h3>
+
+            <div class="info-row">
+                <div class="info-item">
+                    <div class="info-label">Demandeur</div>
+                    <div class="info-value">
+                        <span th:text="|${demande.demandeur.prenom} ${demande.demandeur.nom}|"></span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">
+                        <span th:text="${demande.demandeur.email}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-item">
+                    <div class="info-label">Contact</div>
+                    <div class="info-value">
+                        <span th:text="${demande.demandeur.contact}"></span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Adresse</div>
+                    <div class="info-value">
+                        <span th:text="${demande.demandeur.adresseMada}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prochaines Étapes -->
+        <div>
+            <h3 class="section-title">
+                <i class="bi bi-list-check"></i> Prochaines Étapes
+            </h3>
+
+            <div class="steps-container">
+                <ul class="steps-list">
+                    <li>
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Vérification des Documents</div>
+                            <div class="step-description">Nos agents vérifieront la complétude et la validité de votre dossier.</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Convocation pour Entretien</div>
+                            <div class="step-description">Vous recevrez une convocation par email ou SMS pour un entretien si nécessaire.</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Traitement de la Demande</div>
+                            <div class="step-description">Votre demande sera traitée selon les délais prévus. Vous pouvez suivre l'état en ligne.</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Remise du Titre</div>
+                            <div class="step-description">Une fois approuvée, votre titre de séjour sera disponible à la récupération.</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Information Importante -->
+        <div class="info-box">
+            <div class="info-box-title">
+                <i class="bi bi-exclamation-triangle"></i> À Retenir
+            </div>
+            <div class="info-box-text">
+                <strong>Votre numéro de référence :</strong> #<span th:text="${demande.id}"></span><br>
+                Conservez bien ce numéro pour tous vos échanges futurs avec nos services. 
+                Vous pouvez utiliser ce numéro pour consulter l'état d'avancement de votre demande à tout moment.
+            </div>
+            <div class="download-code">#<span th:text="${demande.id}"></span></div>
+        </div>
+
+        <!-- Code QR de Suivi -->
+        <div class="info-box" th:if="${demande.qrToken}">
+            <div class="info-box-title">
+                <i class="bi bi-qr-code"></i> Code QR de Suivi
+            </div>
+            <div class="info-box-text" style="margin-bottom: 1rem;">
+                Scannez ce code QR avec votre smartphone pour accéder à votre demande et téléverser des pièces justificatives en ligne.
+            </div>
+            <div style="text-align: center;">
+                <div id="qrcode" style="display: inline-block; padding: 1rem; background: white; border-radius: 8px;"></div>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 1rem; text-align: center;">
+                Token: <code style="background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px;" th:text="${demande.qrToken}"></code>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-container">
+            <a href="/demandes/attente" class="btn-custom btn-primary-custom">
+                <i class="bi bi-eye"></i> Voir ma Demande
+            </a>
+            <a href="/nouveau-titre" class="btn-custom btn-secondary-custom">
+                <i class="bi bi-plus-circle"></i> Nouvelle Demande
+            </a>
+            <a href="/" class="btn-custom btn-light-custom">
+                <i class="bi bi-house"></i> Retour à l'Accueil
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- QR Code Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+    // Générer le QR code si le token existe
+    const qrcodeDiv = document.getElementById('qrcode');
+    const tokenElement = document.querySelector('[th\\:text="${demande.qrToken}"]');
+    
+    if (qrcodeDiv) {
+        const token = qrcodeDiv.closest('.info-box')?.querySelector('code')?.textContent || '';
+        if (token) {
+            // Construire l'URL du QR code
+            // Support des accès réseau (IP statique ou dynamique)
+            let baseUrl = window.location.origin;
+            
+            // Si on est en localhost, utiliser l'IP réelle (si disponible)
+            if (baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1')) {
+                // Récupérer l'IP locale du serveur
+                const currentHost = window.location.hostname;
+                if (currentHost === 'localhost' || currentHost === '127.0.0.1') {
+                    // Essayer d'obtenir l'IP locale depuis le serveur via une requête
+                    fetch('/api/server-info')
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.serverIp) {
+                                baseUrl = 'http://' + data.serverIp + ':' + window.location.port;
+                            }
+                            generateQRCode(baseUrl, token);
+                        })
+                        .catch(() => generateQRCode(baseUrl, token));
+                } else {
+                    generateQRCode(baseUrl, token);
+                }
+            } else {
+                generateQRCode(baseUrl, token);
+            }
+        }
+    }
+    
+    function generateQRCode(baseUrl, token) {
+        const qrUrl = baseUrl + '/api/frontoffice/qr/' + token;
+        console.log('QR Code URL:', qrUrl);
+        
+        // Optionnel: afficher aussi l'URL en texte
+        const urlDisplay = document.createElement('div');
+        urlDisplay.style.fontSize = '0.7rem';
+        urlDisplay.style.color = '#666';
+        urlDisplay.style.marginTop = '0.5rem';
+        urlDisplay.style.wordBreak = 'break-all';
+        urlDisplay.textContent = 'URL: ' + qrUrl;
+        
+        new QRCode(document.getElementById('qrcode'), {
+            text: qrUrl,
+            width: 200,
+            height: 200,
+            correctLevel: QRCode.CorrectLevel.H,
+            colorDark: '#000000',
+            colorLight: '#ffffff'
+        });
+        
+        // Ajouter l'affichage de l'URL
+        const qrDiv = document.getElementById('qrcode');
+        if (qrDiv && qrDiv.parentElement) {
+            qrDiv.parentElement.appendChild(urlDisplay);
+        }
+    }
+</script>
+</body>
+</html>
