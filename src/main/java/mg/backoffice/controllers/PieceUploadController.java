@@ -127,18 +127,20 @@ public class PieceUploadController {
     }
     
     /**
-     * Obtenir tous les fichiers d'une pièce pour aperçu
+     * Générer et afficher un PDF avec tous les aperçus des pièces
      */
     @GetMapping("/apercu-tous/{idDemande}")
-    public String afficherAperçuTous(@PathVariable int idDemande, Model model) {
+    public ResponseEntity<byte[]> afficherAperçuTous(@PathVariable int idDemande) {
         try {
             List<PieceDemande> pieces = pieceUploadService.getAllPiecesForDemande(idDemande);
-            model.addAttribute("pieces", pieces);
-            model.addAttribute("idDemande", idDemande);
-            return "apercu-pieces";
+            byte[] pdfBytes = pieceUploadService.genererPdfAperçuTous(idDemande, pieces);
+            
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header("Content-Disposition", "inline; filename=\"apercu_demande_" + idDemande + ".pdf\"")
+                    .body(pdfBytes);
         } catch (Exception e) {
-            model.addAttribute("erreur", "Erreur lors du chargement des aperçus");
-            return "error";
+            return ResponseEntity.status(500).build();
         }
     }
     

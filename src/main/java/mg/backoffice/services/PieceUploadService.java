@@ -8,6 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,6 +24,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.io.ByteArrayOutputStream;
 
 @Service
 public class PieceUploadService {
@@ -161,5 +170,106 @@ public class PieceUploadService {
     
     public List<HistoriqueFichier> getHistoriqueFichiers(int idDemande) {
         return historiqueFichierRepository.findByDemandeId(idDemande);
+    }
+    
+    /**
+     * Générer un PDF avec tous les aperçus des pièces de la demande
+     */
+    public byte[] genererPdfAperçuTous(int idDemande, List<PieceDemande> pieces) throws Exception {
+        Document document = new Document(PageSize.A4, 25, 25, 25, 25);
+        ByteArrayOutputStream pdfStream = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, pdfStream);
+        
+        document.open();
+        
+        // Titre du document
+        Font titleFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+        Paragraph title = new Paragraph("APERÇU DES PIÈCES JUSTIFICATIVES", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingAfter(10);
+        document.add(title);
+        
+        // Numéro de demande
+        Font normalFont = new Font(Font.FontFamily.HELVETICA, 10);
+        Paragraph demandeInfo = new Paragraph("Demande N° " + idDemande, normalFont);
+        demandeInfo.setAlignment(Element.ALIGN_CENTER);
+        demandeInfo.setSpacingAfter(20);
+        document.add(demandeInfo);
+        
+        // Date de génération
+        Paragraph dateGen = new Paragraph(
+            "Généré le: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+            normalFont);
+        dateGen.setSpacingAfter(30);
+        document.add(dateGen);
+        
+        // Ajouter chaque pièce
+        for (PieceDemande piece : pieces) {
+            // Titre de la pièce
+            Font boldFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
+            String pieceName = piece.getPiece() != null ? piece.getPiece().getLibelle() : "Pièce inconnue";
+            Paragraph pieceTitle = new Paragraph(pieceName, boldFont);
+            pieceTitle.setSpacingBefore(15);
+            pieceTitle.setSpacingAfter(10);
+            document.add(pieceTitle);
+            
+            // Préférer le scan au fichier original, puis la photo
+            String cheminFichier = piece.getCheminScan() != null ? piece.getCheminScan() :
+                                   piece.getCheminPhoto() != null ? piece.getCheminPhoto() :
+                                   piece.getCheminFichier();
+            
+            if (cheminFichier != null) {
+                try {
+                    Path filePath = Paths.get(cheminFichier);
+                    if (!Files.exists(filePath)) {
+                        filePath = Paths.get("uploads", cheminFichier);
+                    }
+                    
+                    if (Files.exists(filePath)) {
+                        String fileName = filePath.toString().toLowerCase();
+                        
+                        // Si c'est une image, l'ajouter directement
+                        if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || 
+                            fileName.endsWith(".png") || fileName.endsWith(".gif")) {
+                            try {
+                                Image img = Image.getInstance(filePath.toString());
+                                // Ajuster la taille de l'image pour la page
+                                img.scaleToFit(500f, 700f);
+                                img.setAlignment(Element.ALIGN_CENTER);
+                                document.add(img);
+                                document.add(new Paragraph(" "));
+                            } catch (Exception e) {
+                                Paragraph errorPara = new Paragraph("Erreur: impossible d'afficher l'image", normalFont);
+                                document.add(errorPara);
+                            }
+                        } else if (fileName.endsWith(".pdf")) {
+                            // Pour les PDFs, ajouter une note
+                            Paragraph pdfNote = new Paragraph("[Document PDF non incorporable]", normalFont);
+                            document.add(pdfNote);
+                        } else {
+                            Paragraph unknownNote = new Paragraph("[Format de fichier non supporté]", normalFont);
+                            document.add(unknownNote);
+                        }
+                    } else {
+                        Paragraph notFoundPara = new Paragraph("Fichier non trouvé", normalFont);
+                        document.add(notFoundPara);
+                    }
+                } catch (Exception e) {
+                    Paragraph errorPara = new Paragraph("Erreur lors du chargement du fichier", normalFont);
+                    document.add(errorPara);
+                }
+            } else {
+                Paragraph noPiecePara = new Paragraph("Aucun fichier uploadé", normalFont);
+                document.add(noPiecePara);
+            }
+            
+            // Ajouter une nouvelle page pour la prochaine pièce (sauf pour la dernière)
+            if (!piece.equals(pieces.get(pieces.size() - 1))) {
+                document.newPage();
+            }
+        }
+        
+        document.close();
+        return pdfStream.toByteArray();
     }
 }
