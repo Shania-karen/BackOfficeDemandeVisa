@@ -25,7 +25,7 @@ public interface DemandeRepository extends JpaRepository<Demande, Integer> {
     @Query(value = "SELECT d.* FROM demande d " +
                    "JOIN historique_status_demande h ON d.id = h.id_demande " +
                    "JOIN status s ON h.id_status = s.id " +
-                   "WHERE s.code = 'ATT' " +
+                 "WHERE s.code IN ('ATT', 'CREEE') " +
                    "AND h.date_status = (SELECT MAX(h2.date_status) FROM historique_status_demande h2 WHERE h2.id_demande = d.id)", 
            nativeQuery = true)
     List<Demande> findDemandesEnAttente();
@@ -38,6 +38,7 @@ public interface DemandeRepository extends JpaRepository<Demande, Integer> {
            "LEFT JOIN FETCH d.visaTransformable vt " +
            "LEFT JOIN FETCH vt.passeport " +
            "LEFT JOIN FETCH d.categorieVisa " +
+           "LEFT JOIN FETCH d.typeDemande " +
            "WHERE d.id = :id")
     Optional<Demande> findByIdWithRelations(Integer id);
 

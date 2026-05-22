@@ -101,6 +101,11 @@ public class ViewController {
         return "detail-demande";
     }
 
+    @GetMapping("/demandes/{id}")
+    public String detailDemandeDepuisDemandes(@PathVariable("id") Integer id, Model model) {
+        return detailDemande(id, model);
+    }
+
     private void changerStatutDemande(Integer idDemande, String codeStatut) {
         logger.info("=== CHANGER STATUT - ID: {}, Code: {} ===", idDemande, codeStatut);
         
